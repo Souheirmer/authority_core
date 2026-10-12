@@ -90,10 +90,10 @@ See columns `wall_s`, `cpu_s` and `max_rss_kb` in `logs/verus_runs.csv`. These a
 | 4.3 | 01:15:08Z | 01:20:02Z (`028b37f`) | 4 min 54 s | spec v4 verified; Extension B (trace validation) |
 | 4.4 | 01:27:42Z | 01:29:24Z (`2eb8914`) | 1 min 42 s | Extension A spec files; stopped for approval |
 | 4.5 | 01:40:42Z | 01:55:22Z (merge `293d83d`) | 14 min 40 s | Extension A proofs, executable rules, tests, `RESULTS_RULES.md`, merge into main |
-| 4.6 | 02:16:35Z | CLOSE_END | CLOSE_DUR | close-out: review 9, measurements, merge |
+| 4.6 | 02:16:35Z | 02:17:10Z (`40ef70d`) | 0 min 35 s | close-out: review 9, measurements, merge |
 
-- **Agent wall-clock, session 4:** S4_TOTAL. That is Extension B 7 min 53 s (turns 4.1–4.3) and Extension A 16 min 22 s (turns 4.4–4.5), plus the close-out.
-- **Elapsed, session 4:** 00:53:28Z to CLOSE_END (S4_ELAPSED), including the waits for the human.
+- **Agent wall-clock, session 4:** 24 min 50 s. That is Extension B 7 min 53 s (turns 4.1–4.3) and Extension A 16 min 22 s (turns 4.4–4.5), plus the close-out.
+- **Elapsed, session 4:** 00:53:28Z to 02:17:10Z (`40ef70d`) (1 h 23 min 42 s), including the waits for the human.
 - TLC and checker runs are logged in `logs/trace_runs.csv` (wall time, CPU time, peak RSS), on the same 4-core Xeon sandbox.
 
 ## Independent AI review
