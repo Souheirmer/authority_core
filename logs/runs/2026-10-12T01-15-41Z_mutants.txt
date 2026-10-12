@@ -1,0 +1,13 @@
+error: postcondition not satisfied
+   --> mutants/receipt_timed.rs:118:9
+    |
+110 | / pub proof fn lemma_p5_receipt_timed_attempt(
+111 | |     e: RtEntry, now: u64, delta: u64, sigma_hat: u64, critical: bool, since_rev: int, sigma: int,
+112 | | )
+    | |_- at the end of the function body
+...
+118 |           since_rev <= delta as int,
+    |           ^^^^^^^^^^^^^^^^^^^^^^^^^ failed this postcondition
+
+verification results:: 13 verified, 1 errors
+error: aborting due to 1 previous error

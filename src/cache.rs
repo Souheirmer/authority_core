@@ -42,6 +42,17 @@ impl Cache {
         }
     }
 
+    /// Spec v4: answer of a synchronous registry poll (mirrors PdpPoll,
+    /// Provisioning.tla lines 268-279): unconditional overwrite, orig := now.
+    pub fn poll_update(&mut self, d: u32, st: Status, ver: u64, now: u64)
+        requires
+            (d as int) < (N as int),
+        ensures
+            poll_post(old(self)@, final(self)@, d, st, ver, now),
+    {
+        self.entries[d as usize] = Entry { status: st, ver: ver, orig: now };
+    }
+
     /// P3 at cache level: out-of-range device ids deny.
     pub fn allow_device(&self, d: u32, now: u64, delta: u64, sigma_hat: u64, critical: bool) -> (b: bool)
         ensures

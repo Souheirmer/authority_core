@@ -1,6 +1,6 @@
 # Results
 
-Verus `0.2026.10.04.426d8b0`, Rust `1.98.1`, Ubuntu 24.04 x86_64. Specification: `src/spec.rs` v3 (human-approved, see `SPEC_CHANGES.md`).
+Verus `0.2026.10.04.426d8b0`, Rust `1.98.1`, Ubuntu 24.04 x86_64. Specification: `src/spec.rs` v4 (human-approved, see `SPEC_CHANGES.md`). Sections 1–8 report sessions 1–3 (spec v3); session 4 changes are in §9.
 Final verification of the crate: **28 verified, 0 errors** (`logs/verus_runs.csv`, final run 2026-10-12T00:18:24Z on spec v3; 2.46 s wall, 3.08 s CPU, 316 MiB peak RSS). The no-gaming check passed on every run, with exactly one trusted `external_body` (`signature_ok`).
 
 ## 1. What was proved (accepted by Verus)
@@ -149,7 +149,7 @@ Details and sources are in `MEASUREMENTS.md`.
 - Review 3: 1 s.
 - Review 4: 2 s.
 
-**Cost** (reported by human): about $2 (session 1), about $1 (session 2), about $1 (session 3; the human had earlier said "about $3 so far" mid-session, unexplained). Total reported: about $4. Token usage is not visible to the agent.
+**Cost** (reported by human): about $2 (session 1), about $1 (session 2), about $1 (session 3). Total: about $4, confirmed by the human (the "about $3 so far" said mid-session 3 was the cumulative total). Token usage is not visible to the agent.
 
 ## 8. What did not work / caveats
 
@@ -158,3 +158,29 @@ Details and sources are in `MEASUREMENTS.md`.
 - P5 is the arithmetic core only. Verus does not prove that a running system keeps the invariant `since_rev <= (now - orig) + sigma`; that is the TLA+ model's job.
 - The crate is `#![no_std]` and verifies under Verus, but no build was tested on an actual embedded no_std target.
 - Token usage is not visible inside the sandbox.
+
+## 9. Session 4: spec v4 and Extension B (trace validation)
+
+**Spec v4** (human-approved; see `SPEC_CHANGES.md`):
+- `Suspended` status, wire byte 2.
+- `poll_spec`/`poll_post` and a verified `Cache::poll_update`, mirroring `PdpPoll`.
+- P4 generalised to "status ≠ Enrolled, or a critical event, or σ̂ > Δ ⇒ deny".
+
+Crate: **29 verified, 0 errors**, on the first attempt (run 01:15:32Z). Mutant crate: 13 verified, 1 error (the expected lemma failure, run 01:15:41Z). The 3 tests pass.
+
+**Extension B** (details in `trace_validation/REPORT.md`; mapping in `trace_validation/MAPPING.md`). This is conformance testing, not a refinement proof.
+- The verified code against **1,600 TLC traces of `RULE = "A8_OriginLease"`** (4 configurations, including σ = σ̂ = 1 and the paper's default; 30 steps each; 48,000 steps; 99,200 device comparisons): **0 cache mismatches and 0 decision mismatches.**
+- Non-vacuity: the receipt-timed mutant disagrees on 54 steps in 8 traces; the verified code against 900 A3 traces disagrees on 2,471 steps in 290 traces; poll answers routed through `apply` produce 8,330 cache-mismatch steps and 24 decision-mismatch steps.
+- TLC and checker runs: 23 in `logs/trace_runs.csv`, with time and memory.
+  - Of the 23 rows: 4 exploratory TLC runs by hand (no measurements), 7 generation runs, 1 reproducibility run, 4 + 4 + 3 + 4 checker runs.
+  - Generation: 1.5–2.9 s wall each, up to 383 MiB peak.
+  - Each checker run: under 0.2 s and about 2.6 MiB.
+
+## 10. Session 4: Extension A (all eight rules)
+
+See **`RESULTS_RULES.md`**. All 80 cells of the paper's 8×10 table are machine-checked and agree with `model/EXPECTED_RESULTS.md`; this is proved by the theorem `lemma_paper_table`. There are 0 disagreements and 0 open cells.
+- **30 ✓ cells:** inductive invariants over the transcribed transition system. They include the model's `OriginPrecedesRevocation`; A8/S3 reuses P5.
+- **50 ✗ cells:** Verus-checked counterexample executions, also replayed as Rust tests.
+- **Executable rules:** A1–A8, proved equal to their spec functions. A8 is the original verified `decide::allow`.
+- **Size:** the crate now has 112 verified items, 0 errors.
+- **Runs:** 20 Verus runs for Extension A (12 passed, 8 failed: 5 development, 2 deliberate sanity, 1 expected mutant).

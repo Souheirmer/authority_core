@@ -1,0 +1,56 @@
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:242:9
+    |
+242 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:271:9
+    |
+271 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:287:9
+    |
+287 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:306:9
+    |
+306 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:326:9
+    |
+326 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:346:9
+    |
+346 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+verification results:: 102 verified, 0 errors
+warning: 6 warnings emitted

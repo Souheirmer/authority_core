@@ -7,6 +7,12 @@ pub mod decode;
 pub mod cache;
 pub mod decide;
 pub mod lemmas;
+pub mod system_spec;
+pub mod rules_spec;
+pub mod rules_proofs;
+pub mod rules_cex;
+pub mod rules_table;
+pub mod rules_exec;
 
 use vstd::prelude::*;
 

@@ -1,0 +1,15 @@
+[package]
+name = "trace_validation"
+version = "0.1.0"
+edition = "2021"
+
+[[bin]]
+name = "trace_check"
+path = "src/main.rs"
+
+[dependencies]
+authority_core = { path = ".." }
+authority_core_mutants = { path = "../mutants" }
+
+[lints]
+workspace = true

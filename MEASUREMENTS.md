@@ -8,6 +8,8 @@
 | Verus | `0.2026.10.04.426d8b0` (commit `426d8b01e7ffb910a36c15e1f870ff985bb61eef`), release asset `verus-0.2026.10.04.426d8b0-x86-linux.zip` |
 | Rust toolchain required by Verus | `1.98.1-x86_64-unknown-linux-gnu` |
 | Z3 | bundled with the Verus release |
+| Java (for TLC) | OpenJDK `21.0.12.1` (2026-08-18), preinstalled in the sandbox; `setup.sh` installs `openjdk-21-jre-headless` if missing |
+| TLA+ tools | `tla2tools.jar` from release `v1.7.4` (TLC 2.19 of 08 August 2024, rev 5a47802), SHA-256 `936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88` (checked by `setup.sh`). The `v1.8.0` tag was not used: its asset is a rolling build (TLC 2026.10.06), so it can't be pinned. |
 
 Installed by `scripts/setup.sh`.
 
@@ -32,13 +34,20 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 | 1 | Approving the spec: reviewing v1, including reading the independent AI review | 1 | reported by human |
 | 2 | Reading the review and sending instructions | 2 | reported by human |
 | 3 | Session 3 activity (not broken down) | 0.65 (39 s) | reported by human |
-| **Total** | | **6 min 39 s** | before session 1, sessions 1–3 |
+| before 4 | Uploading the model to GitHub; sending the session 4 prompt | 2 | reported by human |
+| 4 | Approving spec v4 (with the P4 generalisation) | 0.33 (20 s) | reported by human |
+| 4 | Reviewing Extension B and deciding to continue | 0.57 (34 s) | reported by human; the human puts session 4 so far at about 1 min (20 s + 34 s = 54 s) |
+| 4 | Approving the Extension A spec files and proof plan | 0.42 (25 s) | reported by human |
+| **Total** | | **9 min 58 s** | before session 1, sessions 1–3, session 4 so far |
 
 | Session | Cost (reported by human) |
 |---|---|
 | 1 | about $2 of cloud credits |
 | 2 | about $1 |
-| 3 | about $1 (final figure as reported; mid-session the human had said "about $3 so far", which was not explained, so both are recorded) |
+| 3 | about $1 |
+| **Total, sessions 1–3** | **about $4** (confirmed by the human; the "about $3 so far" said mid-session 3 was the cumulative total of sessions 1–2) |
+| 4 (so far, at the spec v4 approval, 01:15Z) | cumulative total about $6, i.e. about $2 in session 4 so far (reported by human) |
+| 4 (Extension B complete, 01:21Z) | about $4 for session 4 so far (all of Extension B); cumulative total about $8 (reported by human) |
 
 ## Wall-clock time (exact, UTC)
 
@@ -65,6 +74,18 @@ Session 2 spans two agent turns; the second turn (resource measurement) is count
 
 See columns `wall_s`, `cpu_s` and `max_rss_kb` in `logs/verus_runs.csv`. These are measured from 2026-10-12T00:11:02Z on; earlier runs show `NA`.
 
+### Session 4: 2026-10-12
+
+- Wall-clock start: 2026-10-12T00:53:28Z (clock).
+- Human minutes before session 4: 2 (uploading the model, sending the prompt).
+- Agent turns (exact):
+  - 00:53:28Z (clock) to 00:55:55Z (clock) / 00:56Z (commit). Setup and mapping question; stopped for the human.
+  - 01:01:20Z (clock) to commit `cad3538`. Spec v4 draft; stopped for approval.
+  - 01:15:08Z (clock) to the Extension B commit (see `git log`). v4 verified, trace validation.
+  - 01:27:42Z (clock) to commit `2eb8914` at 01:29:24Z. Extension A spec files; stopped for approval.
+  - 01:40:42Z (clock) to the final session 4 commit (see `git log`). Extension A proofs, executable rules, tests, `RESULTS_RULES.md`, merge into main.
+- TLC and checker runs are logged in `logs/trace_runs.csv` (wall time, CPU time, peak RSS), on the same 4-core Xeon sandbox.
+
 ## Independent AI review
 
 Kept separate from human minutes. These are reviews by an AI system other than the one doing the work, arranged by the human. Times are the reviewer's clock as reported by the human; the reviewer's clock and the sandbox clock are not synchronised.
@@ -75,5 +96,9 @@ Kept separate from human minutes. These are reviews by an AI system other than t
 | 2 (session 2) | Spec v2 diff, implementation, proofs, mutant, logs | 2026-10-12T00:10:56Z – 00:11:14Z (18 s) | Approved with follow-ups: put `handle` into the spec, compute the measurements, use exact times |
 | 3 (commit `da9933c`) | Resource measurement: scripts and logs, no source changes | 00:14:19Z – 00:14:20Z (1 s) | Approved |
 | 4 (session 3) | Spec v3 diff, `handle` contract, logs, no-gaming check | 00:20:30Z – 00:20:32Z (2 s) | Approved |
+| 5 (session 4 setup) | Model unchanged vs. upload, TraceGen wrapper, PdpPoll semantics, mapping questions | 00:57:09Z – 00:57:11Z (2 s) | Approved, with decisions 1(a) (verified `poll_update`) and 2(a) (`Suspended`, wire byte 2) |
+| 6 (spec v4 diff) | `Suspended`, `poll_spec`/`poll_post`, checked against PdpPoll lines 268–279 and CacheNotAheadOfRegistry line 557 | 01:03:38Z – 01:03:40Z (2 s) | Approved with the P4 generalisation |
+| 7 (Extension B) | Spec v4 change, `poll_update`, logs, trace runs, non-vacuity runs, no-gaming check | 01:21:19Z – 01:21:21Z (2 s) | Approved |
+| 8 (Extension A spec) | Rules A1–A8, properties S1–AVPD, Init, all 12 actions, `paper_params`, compared line by line with Provisioning.tla and the TLC configuration files | 01:30:22Z – 01:30:52Z (30 s) | Approved |
 
 The review client runs on the human's MacBook Pro (Apple M1 Pro, 10 cores, 16 GB RAM, macOS 26.6.2). The reviewing model runs on the provider's servers, whose hardware is not visible.

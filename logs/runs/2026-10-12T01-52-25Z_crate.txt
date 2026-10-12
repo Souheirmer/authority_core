@@ -1,0 +1,78 @@
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:242:9
+    |
+242 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:271:9
+    |
+271 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:287:9
+    |
+287 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:306:9
+    |
+306 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:326:9
+    |
+326 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+warning: using ==> in `assert forall` does not currently assume the antecedent in the body; consider using `implies` instead of `==>`
+   --> src/rules_proofs.rs:346:9
+    |
+346 |         assert forall|d: nat| d < p.ndev implies
+    |         ^^^^^^
+    |
+    = help: to suppress this warning, use `#[verifier::allow(assert_forall_implication)]` on the surrounding function, datatype, or module or `#![verifier::allow(assert_forall_implication)]` in the module or crate
+    = help: If you didn't mean to assume the antecedent, we're very curious to hear why! To tell us, please open an issue on the Verus issue tracker on github with the title `Don't always make assert forall assume the antecedent`. If no one opens such an issue, we'll soon change the behavior of Verus to always assume the antecedent of the outermost implication
+
+error: postcondition not satisfied
+  --> src/rules_exec.rs:71:13
+   |
+71 |       ensures forall|p: Params, s: State, d: nat|
+   |  _____________^
+72 | |         #[trigger] inputs_match(*x, *k, p, s, d) ==> b == a3_lease(p, s, d),
+   | |___________________________________________________________________________^ failed this postcondition
+73 |   {
+74 |       is_enrolled(&x.pdp_st) && x.pdp_age < k.lease
+   |       --------------------------------------------- at the end of the function body
+
+error: postcondition not satisfied
+  --> src/rules_exec.rs:93:13
+   |
+93 |       ensures forall|p: Params, s: State, d: nat, k: RuleConsts|
+   |  _____________^
+94 | |         #[trigger] inputs_match(*x, k, p, s, d) ==> b == a6_fail_closed_ctx(p, s, d),
+   | |____________________________________________________________________________________^ failed this postcondition
+95 |   {
+96 |       exec_a4(x)
+   |       ---------- at the end of the function body
+
+verification results:: 110 verified, 2 errors
+error: aborting due to 2 previous errors; 6 warnings emitted

@@ -13,7 +13,7 @@ vstd = { version = "=0.0.0-2026-10-04-0306", default-features = false }
 authority_core_mutants = { path = "mutants" }
 
 [workspace]
-members = [".", "mutants"]
+members = [".", "mutants", "trace_validation"]
 
 [workspace.lints.rust]
 unexpected_cfgs = { level = "allow" }
