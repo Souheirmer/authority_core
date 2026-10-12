@@ -1,0 +1,22 @@
+[package]
+name = "authority_core"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "src/lib.rs"
+
+[dependencies]
+vstd = { version = "=0.0.0-2026-10-04-0306", default-features = false }
+
+[dev-dependencies]
+authority_core_mutants = { path = "mutants" }
+
+[workspace]
+members = [".", "mutants"]
+
+[workspace.lints.rust]
+unexpected_cfgs = { level = "allow" }
+
+[lints]
+workspace = true

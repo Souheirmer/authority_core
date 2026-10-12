@@ -11,3 +11,4 @@ timestamp,result,errors,verified,target,note
 2026-10-12T00:06:36Z,fail,2,26,crate,SANITY (expected fail): planted bug >= instead of > in apply;
 2026-10-12T00:06:37Z,fail,1,27,crate,restored after sanity checks;
 2026-10-12T00:06:42Z,pass,0,28,crate,restore planted bug in decide.rs (previous run still had it);
+2026-10-12T00:07:28Z,fail,1,12,mutants,receipt-timed mutant: P5-style attempt (expected fail) + proved negation;

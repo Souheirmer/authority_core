@@ -23,7 +23,8 @@ case "$TARGET" in
   *) echo "unknown target $TARGET"; exit 2 ;;
 esac
 
-OUT=$("$VERUS" "$ROOTFILE" --crate-type=lib 2>&1); RC=$?
+# EXTRA_VERUS_ARGS (optional), e.g. "--emit=dep-info" for line counting
+OUT=$("$VERUS" "$ROOTFILE" --crate-type=lib ${EXTRA_VERUS_ARGS:-} 2>&1); RC=$?
 echo "$OUT"
 mkdir -p logs/runs
 echo "$OUT" > "logs/runs/${TS//:/-}_${TARGET}.txt"

@@ -1,0 +1,13 @@
+[package]
+name = "authority_core_mutants"
+version = "0.1.0"
+edition = "2021"
+
+[lib]
+path = "lib.rs"
+
+[dependencies]
+vstd = { version = "=0.0.0-2026-10-04-0306", default-features = false }
+
+[lints]
+workspace = true
