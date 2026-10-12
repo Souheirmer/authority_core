@@ -54,12 +54,12 @@ Sources:
 | 2, turn 1 | 2026-10-12T00:03:49Z (clock; first log 00:04:32Z) | 00:09:39Z (commit `0113f33`) | 5 min 50 s | spec v2, implementation, proofs, mutant, tests, `RESULTS.md` |
 | 2, turn 2 | 00:10:39Z (clock; first log 00:11:02Z) | 00:11:18Z (commit `da9933c`) | 39 s | resource measurement, hardware record |
 | (between sessions) | 00:11:18Z | 00:17:59Z | 6 min 41 s elapsed | |
-| 3 | 00:17:59Z (clock; first log 00:18:14Z) | SESSION3_END | SESSION3_DUR | spec v3 (`handle_post`), exact times, final `RESULTS.md` |
+| 3 | 00:17:59Z (clock; first log 00:18:14Z) | 00:19:27Z (commit `67601c9`) | 1 min 28 s | spec v3 (`handle_post`), exact times, final `RESULTS.md` |
 
 Session 2 spans two agent turns; the second turn (resource measurement) is counted in session 2.
 
-- **Total agent wall-clock:** SESSION_TOTAL.
-- **Total elapsed**, from the session 1 start to the session 3 end: TOTAL_ELAPSED.
+- **Total agent wall-clock:** 13 min 29 s.
+- **Total elapsed**, from the session 1 start to the session 3 end: 1 h 4 min 7 s.
 
 ### Verus run resources
 

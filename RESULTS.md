@@ -138,10 +138,10 @@ Details and sources are in `MEASUREMENTS.md`.
 |---|---|---|
 | 1 | 5 min 32 s | |
 | 2 | 6 min 29 s | two turns: 5 min 50 s + 39 s |
-| 3 | SESSION3_DUR | |
-| **Total** | **SESSION_TOTAL** | |
+| 3 | 1 min 28 s | |
+| **Total** | **13 min 29 s** | |
 
-**Total elapsed**, from the first command to the last content commit, including waiting for the human: TOTAL_ELAPSED.
+**Total elapsed**, from the first command to the last content commit, including waiting for the human: 1 h 4 min 7 s.
 
 **Independent AI review** (reviewer's clock, kept separate from human minutes):
 - Review 1: 2 min, human-measured.
