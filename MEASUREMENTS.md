@@ -36,7 +36,8 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 | 3 | Session 3 activity (not broken down) | 0.65 (39 s) | reported by human |
 | before 4 | Uploading the model to GitHub; sending the session 4 prompt | 2 | reported by human |
 | 4 | Approving spec v4 (with the P4 generalisation) | 0.33 (20 s) | reported by human |
-| **Total** | | **8 min 59 s** | before session 1, sessions 1–3, session 4 so far |
+| 4 | Reviewing Extension B and deciding to continue | 0.57 (34 s) | reported by human; the human puts session 4 so far at about 1 min (20 s + 34 s = 54 s) |
+| **Total** | | **9 min 33 s** | before session 1, sessions 1–3, session 4 so far |
 
 | Session | Cost (reported by human) |
 |---|---|
@@ -45,6 +46,7 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 | 3 | about $1 |
 | **Total, sessions 1–3** | **about $4** (confirmed by the human; the "about $3 so far" said mid-session 3 was the cumulative total of sessions 1–2) |
 | 4 (so far, at the spec v4 approval, 01:15Z) | cumulative total about $6, i.e. about $2 in session 4 so far (reported by human) |
+| 4 (Extension B complete, 01:21Z) | about $4 for session 4 so far (all of Extension B); cumulative total about $8 (reported by human) |
 
 ## Wall-clock time (exact, UTC)
 
@@ -93,5 +95,6 @@ Kept separate from human minutes. These are reviews by an AI system other than t
 | 4 (session 3) | Spec v3 diff, `handle` contract, logs, no-gaming check | 00:20:30Z – 00:20:32Z (2 s) | Approved |
 | 5 (session 4 setup) | Model unchanged vs. upload, TraceGen wrapper, PdpPoll semantics, mapping questions | 00:57:09Z – 00:57:11Z (2 s) | Approved, with decisions 1(a) (verified `poll_update`) and 2(a) (`Suspended`, wire byte 2) |
 | 6 (spec v4 diff) | `Suspended`, `poll_spec`/`poll_post`, checked against PdpPoll lines 268–279 and CacheNotAheadOfRegistry line 557 | 01:03:38Z – 01:03:40Z (2 s) | Approved with the P4 generalisation |
+| 7 (Extension B) | Spec v4 change, `poll_update`, logs, trace runs, non-vacuity runs, no-gaming check | 01:21:19Z – 01:21:21Z (2 s) | Approved |
 
 The review client runs on the human's MacBook Pro (Apple M1 Pro, 10 cores, 16 GB RAM, macOS 26.6.2). The reviewing model runs on the provider's servers, whose hardware is not visible.
