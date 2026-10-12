@@ -37,7 +37,8 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 | before 4 | Uploading the model to GitHub; sending the session 4 prompt | 2 | reported by human |
 | 4 | Approving spec v4 (with the P4 generalisation) | 0.33 (20 s) | reported by human |
 | 4 | Reviewing Extension B and deciding to continue | 0.57 (34 s) | reported by human; the human puts session 4 so far at about 1 min (20 s + 34 s = 54 s) |
-| **Total** | | **9 min 33 s** | before session 1, sessions 1–3, session 4 so far |
+| 4 | Approving the Extension A spec files and proof plan | 0.42 (25 s) | reported by human |
+| **Total** | | **9 min 58 s** | before session 1, sessions 1–3, session 4 so far |
 
 | Session | Cost (reported by human) |
 |---|---|
@@ -96,5 +97,6 @@ Kept separate from human minutes. These are reviews by an AI system other than t
 | 5 (session 4 setup) | Model unchanged vs. upload, TraceGen wrapper, PdpPoll semantics, mapping questions | 00:57:09Z – 00:57:11Z (2 s) | Approved, with decisions 1(a) (verified `poll_update`) and 2(a) (`Suspended`, wire byte 2) |
 | 6 (spec v4 diff) | `Suspended`, `poll_spec`/`poll_post`, checked against PdpPoll lines 268–279 and CacheNotAheadOfRegistry line 557 | 01:03:38Z – 01:03:40Z (2 s) | Approved with the P4 generalisation |
 | 7 (Extension B) | Spec v4 change, `poll_update`, logs, trace runs, non-vacuity runs, no-gaming check | 01:21:19Z – 01:21:21Z (2 s) | Approved |
+| 8 (Extension A spec) | Rules A1–A8, properties S1–AVPD, Init, all 12 actions, `paper_params`, compared line by line with Provisioning.tla and the TLC configuration files | 01:30:22Z – 01:30:52Z (30 s) | Approved |
 
 The review client runs on the human's MacBook Pro (Apple M1 Pro, 10 cores, 16 GB RAM, macOS 26.6.2). The reviewing model runs on the provider's servers, whose hardware is not visible.
