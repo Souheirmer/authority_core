@@ -8,6 +8,10 @@ A small `no_std`-style Rust library, verified with [Verus](https://github.com/ve
 - `mutants/`: the receipt-timed lease mutant (expected **not** to verify)
 - `tests/`: P6 witness and the mutant counterexample trace (tests, not proofs)
 
+## Wire format
+
+A notification is exactly 21 bytes: status (0 = Revoked, 1 = Enrolled, 2 = Suspended; anything else is invalid), device id (big-endian u32, < N = 64), ver (big-endian u64), orig (big-endian u64). Since spec v4 the cache also accepts verified poll answers (`Cache::poll_update`, mirroring the model's `PdpPoll`).
+
 ## Assumptions (from the TLA+/TLAPS model)
 
 The rule is implemented exactly as stated; these are the assumptions under which its soundness argument (P5) applies:

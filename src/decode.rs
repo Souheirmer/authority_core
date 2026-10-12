@@ -59,7 +59,7 @@ pub fn decode(bytes: &[u8]) -> (r: Option<Notification>)
         return None;
     }
     let sb = bytes[0];
-    if sb > 1 {
+    if sb > 2 {
         return None;
     }
     let dev = read_be(bytes, 1, 4);
@@ -68,7 +68,13 @@ pub fn decode(bytes: &[u8]) -> (r: Option<Notification>)
     }
     let ver = read_be(bytes, 5, 8);
     let orig = read_be(bytes, 13, 8);
-    let status = if sb == 1 { Status::Enrolled } else { Status::Revoked };
+    let status = if sb == 1 {
+        Status::Enrolled
+    } else if sb == 2 {
+        Status::Suspended
+    } else {
+        Status::Revoked
+    };
     Some(Notification { device: dev as u32, status, ver, orig })
 }
 

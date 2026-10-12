@@ -63,6 +63,14 @@ impl RtCache {
         }
     }
 
+    /// Poll answer, receipt-timed: the lease restarts at the local clock.
+    pub fn poll_update(&mut self, d: u32, st: Status, ver: u64, now: u64)
+        requires
+            (d as int) < (N as int),
+    {
+        self.entries[d as usize] = RtEntry { status: st, ver: ver, orig: now, recv: now };
+    }
+
     pub fn allow_device(&self, d: u32, now: u64, delta: u64, sigma_hat: u64, critical: bool) -> (b: bool)
         ensures
             b == ((d as int) < (N as int) && rt_a8(self@[d as int], now, delta, sigma_hat, critical)),

@@ -18,3 +18,5 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-12T00:18:14Z,pass,0,28,crate,spec v3: handle_post in spec.rs; handle ensures it;,3.9,4.55,318512
 2026-10-12T00:18:23Z,fail,1,12,mutants,re-run mutant after spec v3 (expected fail on attempt lemma only);,0.91,1.00,312596
 2026-10-12T00:18:24Z,pass,0,28,crate,final verification (spec v3) + dep-info for line_count;,2.46,3.08,323244
+2026-10-12T01:15:32Z,pass,0,29,crate,spec v4: Suspended (byte 2); poll_update; P4 generalised;,5.3,5.58,318552
+2026-10-12T01:15:41Z,fail,1,13,mutants,mutant after spec v4 + RtCache::poll_update (expected fail on attempt lemma only);,1.37,1.47,312968

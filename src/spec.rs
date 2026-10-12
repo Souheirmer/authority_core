@@ -261,12 +261,12 @@ pub open spec fn poll_post(old: Seq<Entry>, new: Seq<Entry>, d: u32, st: Status,
     &&& cache_wf(new)
 }
 
-// P4 (lemmas.rs): deny by default: unknown slot, Revoked status, active
-// critical event, or misconfiguration (sigma_hat > delta) always deny.
+// P4 (lemmas.rs): deny by default: any status other than Enrolled (Unknown,
+// Revoked, Suspended), an active critical event, or misconfiguration
+// (sigma_hat > delta) always denies.
 pub open spec fn p4_deny_by_default() -> bool {
     forall|e: Entry, now: u64, delta: u64, sigma_hat: u64, critical: bool|
-        (e.status == Status::Unknown || e.status == Status::Revoked || critical
-            || sigma_hat > delta)
+        (e.status != Status::Enrolled || critical || sigma_hat > delta)
             ==> !#[trigger] a8(e, now, delta, sigma_hat, critical)
 }
 

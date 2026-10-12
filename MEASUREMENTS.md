@@ -35,7 +35,8 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 | 2 | Reading the review and sending instructions | 2 | reported by human |
 | 3 | Session 3 activity (not broken down) | 0.65 (39 s) | reported by human |
 | before 4 | Uploading the model to GitHub; sending the session 4 prompt | 2 | reported by human |
-| **Total** | | **8 min 39 s** | before session 1, sessions 1–3, before session 4 |
+| 4 | Approving spec v4 (with the P4 generalisation) | 0.33 (20 s) | reported by human |
+| **Total** | | **8 min 59 s** | before session 1, sessions 1–3, session 4 so far |
 
 | Session | Cost (reported by human) |
 |---|---|
@@ -43,6 +44,7 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 | 2 | about $1 |
 | 3 | about $1 |
 | **Total, sessions 1–3** | **about $4** (confirmed by the human; the "about $3 so far" said mid-session 3 was the cumulative total of sessions 1–2) |
+| 4 (so far, at the spec v4 approval, 01:15Z) | cumulative total about $6, i.e. about $2 in session 4 so far (reported by human) |
 
 ## Wall-clock time (exact, UTC)
 
@@ -85,5 +87,6 @@ Kept separate from human minutes. These are reviews by an AI system other than t
 | 3 (commit `da9933c`) | Resource measurement: scripts and logs, no source changes | 00:14:19Z – 00:14:20Z (1 s) | Approved |
 | 4 (session 3) | Spec v3 diff, `handle` contract, logs, no-gaming check | 00:20:30Z – 00:20:32Z (2 s) | Approved |
 | 5 (session 4 setup) | Model unchanged vs. upload, TraceGen wrapper, PdpPoll semantics, mapping questions | 00:57:09Z – 00:57:11Z (2 s) | Approved, with decisions 1(a) (verified `poll_update`) and 2(a) (`Suspended`, wire byte 2) |
+| 6 (spec v4 diff) | `Suspended`, `poll_spec`/`poll_post`, checked against PdpPoll lines 268–279 and CacheNotAheadOfRegistry line 557 | 01:03:38Z – 01:03:40Z (2 s) | Approved with the P4 generalisation |
 
 The review client runs on the human's MacBook Pro (Apple M1 Pro, 10 cores, 16 GB RAM, macOS 26.6.2). The reviewing model runs on the provider's servers, whose hardware is not visible.
