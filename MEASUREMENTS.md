@@ -31,14 +31,14 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 | before 1 | Reading the brief; setting up GitHub and the session | 3 | reported by human |
 | 1 | Approving the spec: reviewing v1, including reading the independent AI review | 1 | reported by human |
 | 2 | Reading the review and sending instructions | 2 | reported by human |
-| 3 | _asked at session end; awaiting answer_ | ? | |
-| **Total so far** | | **6** | sessions before 1, 1 and 2 |
+| 3 | Session 3 activity (not broken down) | 0.65 (39 s) | reported by human |
+| **Total** | | **6 min 39 s** | before session 1, sessions 1–3 |
 
 | Session | Cost (reported by human) |
 |---|---|
 | 1 | about $2 of cloud credits |
 | 2 | about $1 |
-| 3 | about $3 so far at its start (as reported); final figure awaiting answer |
+| 3 | about $1 (final figure as reported; mid-session the human had said "about $3 so far", which was not explained, so both are recorded) |
 
 ## Wall-clock time (exact, UTC)
 
@@ -74,5 +74,6 @@ Kept separate from human minutes. These are reviews by an AI system other than t
 | 1 (spec v1) | Checked against rule A8 and the paper's soundness argument, plus scripts and logs | 2 min, as measured by the human (no start/end timestamps were recorded) | Approved with 4 changes (see `SPEC_CHANGES.md`, v2) |
 | 2 (session 2) | Spec v2 diff, implementation, proofs, mutant, logs | 2026-10-12T00:10:56Z – 00:11:14Z (18 s) | Approved with follow-ups: put `handle` into the spec, compute the measurements, use exact times |
 | 3 (commit `da9933c`) | Resource measurement: scripts and logs, no source changes | 00:14:19Z – 00:14:20Z (1 s) | Approved |
+| 4 (session 3) | Spec v3 diff, `handle` contract, logs, no-gaming check | 00:20:30Z – 00:20:32Z (2 s) | Approved |
 
 The review client runs on the human's MacBook Pro (Apple M1 Pro, 10 cores, 16 GB RAM, macOS 26.6.2). The reviewing model runs on the provider's servers, whose hardware is not visible.

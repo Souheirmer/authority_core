@@ -129,8 +129,8 @@ Details and sources are in `MEASUREMENTS.md`.
 | Reading the brief; GitHub and session setup (before session 1) | 3 |
 | Approving the spec, including reading the independent review (session 1) | 1 |
 | Reading the review and sending instructions (session 2) | 2 |
-| Session 3 | _awaiting answer_ |
-| **Total reported** | **6** |
+| Session 3 | 0.65 (39 s) |
+| **Total reported** | **6 min 39 s** |
 
 **Agent wall-clock** (exact; from commit, log and sandbox-clock timestamps):
 
@@ -147,8 +147,9 @@ Details and sources are in `MEASUREMENTS.md`.
 - Review 1: 2 min, human-measured.
 - Review 2: 18 s.
 - Review 3: 1 s.
+- Review 4: 2 s.
 
-**Cost** (reported by human): about $2 (session 1), about $1 (session 2), about $3 for session 3 so far. Token usage is not visible to the agent.
+**Cost** (reported by human): about $2 (session 1), about $1 (session 2), about $1 (session 3; the human had earlier said "about $3 so far" mid-session, unexplained). Total reported: about $4. Token usage is not visible to the agent.
 
 ## 8. What did not work / caveats
 
