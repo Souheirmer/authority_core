@@ -38,7 +38,8 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 | 4 | Approving spec v4 (with the P4 generalisation) | 0.33 (20 s) | reported by human |
 | 4 | Reviewing Extension B and deciding to continue | 0.57 (34 s) | reported by human; the human puts session 4 so far at about 1 min (20 s + 34 s = 54 s) |
 | 4 | Approving the Extension A spec files and proof plan | 0.42 (25 s) | reported by human |
-| **Total** | | **9 min 58 s** | before session 1, sessions 1–3, session 4 so far |
+| 4 | Reviewing Extension A and closing session 4 | 0.27 (16 s) | reported by human |
+| **Total** | | **10 min 14 s** | before session 1, sessions 1–4 |
 
 | Session | Cost (reported by human) |
 |---|---|
@@ -48,6 +49,7 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 | **Total, sessions 1–3** | **about $4** (confirmed by the human; the "about $3 so far" said mid-session 3 was the cumulative total of sessions 1–2) |
 | 4 (so far, at the spec v4 approval, 01:15Z) | cumulative total about $6, i.e. about $2 in session 4 so far (reported by human) |
 | 4 (Extension B complete, 01:21Z) | about $4 for session 4 so far (all of Extension B); cumulative total about $8 (reported by human) |
+| 4 (final) | **about $9 for session 4** (Extension B about $4, Extension A about $5); **cumulative total about $13** (reported by human) |
 
 ## Wall-clock time (exact, UTC)
 
@@ -76,14 +78,22 @@ See columns `wall_s`, `cpu_s` and `max_rss_kb` in `logs/verus_runs.csv`. These a
 
 ### Session 4: 2026-10-12
 
-- Wall-clock start: 2026-10-12T00:53:28Z (clock).
 - Human minutes before session 4: 2 (uploading the model, sending the prompt).
-- Agent turns (exact):
-  - 00:53:28Z (clock) to 00:55:55Z (clock) / 00:56Z (commit). Setup and mapping question; stopped for the human.
-  - 01:01:20Z (clock) to commit `cad3538`. Spec v4 draft; stopped for approval.
-  - 01:15:08Z (clock) to the Extension B commit (see `git log`). v4 verified, trace validation.
-  - 01:27:42Z (clock) to commit `2eb8914` at 01:29:24Z. Extension A spec files; stopped for approval.
-  - 01:40:42Z (clock) to the final session 4 commit (see `git log`). Extension A proofs, executable rules, tests, `RESULTS_RULES.md`, merge into main.
+- Human minutes during session 4: 20 s + 34 s + 25 s + 16 s = **1 min 35 s** (spec v4 approval, Extension B review, Extension A spec approval, Extension A review).
+- Cost (reported by human): **about $9 for session 4**: about $4 for Extension B (including setup and spec v4), so about $5 for Extension A (derived). Cumulative total about $13.
+- Agent turns (start = sandbox clock at the turn's first command; end = last commit of the turn):
+
+| Turn | Start | End | Duration | Work |
+|---|---|---|---|---|
+| 4.1 | 00:53:28Z | 00:56:05Z (`e8e20b8`) | 2 min 37 s | setup (Java, TLA+ tools), TraceGen, mapping question; stopped for the human |
+| 4.2 | 01:01:20Z | 01:01:42Z (`cad3538`) | 22 s | spec v4 draft; stopped for approval |
+| 4.3 | 01:15:08Z | 01:20:02Z (`028b37f`) | 4 min 54 s | spec v4 verified; Extension B (trace validation) |
+| 4.4 | 01:27:42Z | 01:29:24Z (`2eb8914`) | 1 min 42 s | Extension A spec files; stopped for approval |
+| 4.5 | 01:40:42Z | 01:55:22Z (merge `293d83d`) | 14 min 40 s | Extension A proofs, executable rules, tests, `RESULTS_RULES.md`, merge into main |
+| 4.6 | 02:16:35Z | 02:17:10Z (`40ef70d`) | 0 min 35 s | close-out: review 9, measurements, merge |
+
+- **Agent wall-clock, session 4:** 24 min 50 s. That is Extension B 7 min 53 s (turns 4.1–4.3) and Extension A 16 min 22 s (turns 4.4–4.5), plus the close-out.
+- **Elapsed, session 4:** 00:53:28Z to 02:17:10Z (`40ef70d`) (1 h 23 min 42 s), including the waits for the human.
 - TLC and checker runs are logged in `logs/trace_runs.csv` (wall time, CPU time, peak RSS), on the same 4-core Xeon sandbox.
 
 ## Independent AI review
@@ -100,5 +110,6 @@ Kept separate from human minutes. These are reviews by an AI system other than t
 | 6 (spec v4 diff) | `Suspended`, `poll_spec`/`poll_post`, checked against PdpPoll lines 268–279 and CacheNotAheadOfRegistry line 557 | 01:03:38Z – 01:03:40Z (2 s) | Approved with the P4 generalisation |
 | 7 (Extension B) | Spec v4 change, `poll_update`, logs, trace runs, non-vacuity runs, no-gaming check | 01:21:19Z – 01:21:21Z (2 s) | Approved |
 | 8 (Extension A spec) | Rules A1–A8, properties S1–AVPD, Init, all 12 actions, `paper_params`, compared line by line with Provisioning.tla and the TLC configuration files | 01:30:22Z – 01:30:52Z (30 s) | Approved |
+| 9 (Extension A) | Spec files unchanged since approval, `lemma_paper_table` statement, no-gaming check, final verification log, mutant re-run, merge | 01:56:49Z – 01:56:57Z (8 s) | Approved |
 
 The review client runs on the human's MacBook Pro (Apple M1 Pro, 10 cores, 16 GB RAM, macOS 26.6.2). The reviewing model runs on the provider's servers, whose hardware is not visible.

@@ -107,13 +107,18 @@ Whole crate: 112 verified items, 0 errors. Trusted 5 lines (`signature_ok`, unch
 
 Hardware: 4-core Intel Xeon @ 2.80GHz, 15 GiB RAM.
 
-## Time
+## Time and cost
 
-- Agent wall-clock for Extension A (commit timestamps and the sandbox clock):
-  - Spec files: 01:27:42Z (clock) to 01:29:24Z (commit `2eb8914`).
-  - Proofs, executable rules, tests and this report: 01:40:42Z (clock) to the final commit of this session (see `git log`).
-- Human minutes: 25 s approving the Extension A spec. The session 4 total is in `MEASUREMENTS.md`.
-- Cost: reported by the human; not visible to the agent.
+| | Value |
+|---|---|
+| Agent wall-clock, Extension A | **16 min 22 s**: spec files 01:27:42Z–01:29:24Z (1 min 42 s); proofs, executable rules, tests, report and merge 01:40:42Z–01:55:22Z (14 min 40 s) |
+| Human minutes, Extension A | **41 s**: 25 s approving the spec files and proof plan, 16 s reviewing the result |
+| Independent AI review, Extension A | review 8 (spec), 30 s; review 9 (result), 8 s (reviewer's clock) |
+| Verus time, Extension A | 195.3 s wall, 238.6 s CPU over 20 runs; peak 370 MiB |
+| Cost, Extension A | about $5 (derived: about $9 for session 4 minus about $4 for Extension B, as reported by the human) |
+| Cumulative cost, sessions 1–4 | about $13 (reported by human) |
+
+Session 4 as a whole (Extension B and Extension A) is in `MEASUREMENTS.md`.
 
 ## What did not work, or is limited
 
