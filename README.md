@@ -6,7 +6,11 @@ A small `no_std`-style Rust library, verified with [Verus](https://github.com/ve
 - `src/decode.rs`, `src/cache.rs`, `src/decide.rs`: verified implementation
 - `src/lemmas.rs`: proofs of the spec-level properties
 - `mutants/`: the receipt-timed lease mutant (expected **not** to verify)
-- `tests/`: P6 witness and the mutant counterexample trace (tests, not proofs)
+- `tests/`: P6 witness, the mutant counterexample trace, and the 50 ✗ cells of Extension A (tests, not proofs)
+- `src/system_spec.rs`, `src/rules_spec.rs`: Provisioning.tla transcribed (state, actions, rules A1–A8, properties S1–AVPD)
+- `src/rules_proofs.rs`, `src/rules_cex.rs`, `src/rules_table.rs`, `src/rules_exec.rs`: the paper's 8×10 table, machine-checked (see `RESULTS_RULES.md`)
+- `trace_validation/`: conformance testing of the code against TLC traces of the model (see `trace_validation/REPORT.md`)
+- `model/`: the TLA+ model and the paper's expected results (ground truth)
 
 ## Wire format
 

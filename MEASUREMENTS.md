@@ -82,6 +82,8 @@ See columns `wall_s`, `cpu_s` and `max_rss_kb` in `logs/verus_runs.csv`. These a
   - 00:53:28Z (clock) to 00:55:55Z (clock) / 00:56Z (commit). Setup and mapping question; stopped for the human.
   - 01:01:20Z (clock) to commit `cad3538`. Spec v4 draft; stopped for approval.
   - 01:15:08Z (clock) to the Extension B commit (see `git log`). v4 verified, trace validation.
+  - 01:27:42Z (clock) to commit `2eb8914` at 01:29:24Z. Extension A spec files; stopped for approval.
+  - 01:40:42Z (clock) to the final session 4 commit (see `git log`). Extension A proofs, executable rules, tests, `RESULTS_RULES.md`, merge into main.
 - TLC and checker runs are logged in `logs/trace_runs.csv` (wall time, CPU time, peak RSS), on the same 4-core Xeon sandbox.
 
 ## Independent AI review

@@ -175,3 +175,12 @@ Crate: **29 verified, 0 errors**, on the first attempt (run 01:15:32Z). Mutant c
   - Of the 23 rows: 4 exploratory TLC runs by hand (no measurements), 7 generation runs, 1 reproducibility run, 4 + 4 + 3 + 4 checker runs.
   - Generation: 1.5–2.9 s wall each, up to 383 MiB peak.
   - Each checker run: under 0.2 s and about 2.6 MiB.
+
+## 10. Session 4: Extension A (all eight rules)
+
+See **`RESULTS_RULES.md`**. All 80 cells of the paper's 8×10 table are machine-checked and agree with `model/EXPECTED_RESULTS.md`; this is proved by the theorem `lemma_paper_table`. There are 0 disagreements and 0 open cells.
+- **30 ✓ cells:** inductive invariants over the transcribed transition system. They include the model's `OriginPrecedesRevocation`; A8/S3 reuses P5.
+- **50 ✗ cells:** Verus-checked counterexample executions, also replayed as Rust tests.
+- **Executable rules:** A1–A8, proved equal to their spec functions. A8 is the original verified `decide::allow`.
+- **Size:** the crate now has 112 verified items, 0 errors.
+- **Runs:** 20 Verus runs for Extension A (12 passed, 8 failed: 5 development, 2 deliberate sanity, 1 expected mutant).

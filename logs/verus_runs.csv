@@ -35,3 +35,8 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-12T01:50:13Z,fail,1,98,crate,ExtA: split S7 damage trace into a per-access lemma (rlimit);,13.43,16.24,375864
 2026-10-12T01:50:33Z,pass,0,99,crate,ExtA: lemma_trace_change exposes its action list and length;,14.04,16.75,372564
 2026-10-12T01:51:07Z,pass,0,102,crate,ExtA: lemma_paper_table (all 80 cells vs paper_expected);,14.03,17.03,375196
+2026-10-12T01:51:59Z,pass,0,112,crate,ExtA step 2: executable rules A1-A8 + dispatcher; proved equal to spec (first attempt);,12.75,15.99,377440
+2026-10-12T01:52:25Z,fail,2,110,crate,SANITY (expected fail): planted bugs in exec_a3 (< for <=) and exec_a6 (ignores critical);,13.67,16.99,377344
+2026-10-12T01:52:39Z,pass,0,112,crate,restore exec rules after sanity check;,13.56,16.43,377028
+2026-10-12T01:53:41Z,pass,0,112,crate,ExtA final: full crate + dep-info for line_count;,14.32,17.64,379072
+2026-10-12T01:53:55Z,fail,1,13,mutants,mutant re-run after ExtA (spec.rs unchanged; expected fail on attempt lemma only);,0.77,0.88,315248

@@ -7,7 +7,6 @@ use vstd::prelude::*;
 use crate::spec::*;
 use crate::system_spec::*;
 use crate::rules_spec::*;
-use crate::lemmas::lemma_p5_soundness_core;
 
 verus! {
 
@@ -236,7 +235,7 @@ pub proof fn lemma_cell_s3_a8(p: Params)
     ensures
         cell_holds(p, Rule::A8, Prop::S3),
 {
-    lemma_p5_soundness_core();
+    crate::lemmas::lemma_p5_soundness_core();
     assert forall|s: State| #[trigger] reachable(p, Rule::A8, s) implies prop_holds(p, Rule::A8, Prop::S3, s) by {
         lemma_reachable_inv(p, Rule::A8, s);
         assert forall|d: nat| d < p.ndev implies
