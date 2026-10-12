@@ -7,6 +7,8 @@ pub mod decode;
 pub mod cache;
 pub mod decide;
 pub mod lemmas;
+pub mod system_spec;
+pub mod rules_spec;
 
 use vstd::prelude::*;
 

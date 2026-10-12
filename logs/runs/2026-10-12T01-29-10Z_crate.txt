@@ -1,0 +1,10 @@
+warning: use of deprecated method `vstd::set::Set::<A>::finite`: Every Set is always finite, so this is always true.
+   --> src/system_spec.rs:201:41
+    |
+201 |             s.link == Link::Up && s.net.finite() && s.net.len() < p.maxnet
+    |                                         ^^^^^^
+    |
+    = note: `#[warn(deprecated)]` on by default
+
+verification results:: 29 verified, 0 errors
+warning: 1 warning emitted
