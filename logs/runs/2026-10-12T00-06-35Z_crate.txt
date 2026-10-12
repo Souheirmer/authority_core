@@ -1,0 +1,11 @@
+error: postcondition not satisfied
+  --> src/decide.rs:10:9
+   |
+10 |         allow_post(*e, now, delta, sigma_hat, critical, b),
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ failed this postcondition
+...
+24 |     now - e.orig < delta - sigma_hat
+   |     -------------------------------- at the end of the function body
+
+verification results:: 27 verified, 1 errors
+error: aborting due to 1 previous error

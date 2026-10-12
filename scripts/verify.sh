@@ -33,7 +33,7 @@ VERIFIED=$(echo "$SUMMARY" | grep -oE '[0-9]+ verified' | grep -oE '[0-9]+'); VE
 ERRORS=$(echo "$SUMMARY" | grep -oE '[0-9]+ errors' | grep -oE '[0-9]+')
 if [ -z "$ERRORS" ]; then
   # no summary line: compile/type error before verification
-  ERRORS=$(echo "$OUT" | grep -cE '^error')
+  ERRORS=$(echo "$OUT" | grep -E '^error' | grep -vc 'aborting due to')
 fi
 if [ "$RC" -eq 0 ] && [ "$GAMING_RC" -eq 0 ] && [ "$ERRORS" -eq 0 ]; then RESULT=pass; else RESULT=fail; fi
 [ "$GAMING_RC" -ne 0 ] && NOTE="GAMING-CHECK-FAILED; $NOTE"
