@@ -8,6 +8,15 @@ A small `no_std`-style Rust library, verified with [Verus](https://github.com/ve
 - `mutants/`: the receipt-timed lease mutant (expected **not** to verify)
 - `tests/`: P6 witness and the mutant counterexample trace (tests, not proofs)
 
+## Assumptions (from the TLA+/TLAPS model)
+
+The rule is implemented exactly as stated; these are the assumptions under which its soundness argument (P5) applies:
+
+- **Bounded clock error.** Registry origin stamps (`orig`) are at most `sigma` ahead of the decision point's clock, as in the TLA+ model. P5 additionally requires the configured bound to cover the real one: `sigma <= sigma_hat`. P6 (a test) shows this margin is necessary.
+- **Configuration.** The paper's precondition `sigma_hat <= delta` is not assumed. It is a conjunct of `a8` instead, so a misconfigured decision point (`sigma_hat > delta`) denies every request.
+- **Versions start at 1.** An empty slot holds `(Unknown, ver = 0, orig = 0)`, and `apply` overwrites only on a strictly greater version, so the registry's first record for a device must have `ver >= 1`. A `ver = 0` notification is ignored.
+- **Signatures.** `signature_ok(bytes, sig)` is a trusted, unverified function (`#[verifier::external_body]`). It is the only trusted code in the crate.
+
 ## Usage
 
 ```sh

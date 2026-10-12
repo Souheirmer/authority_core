@@ -5,7 +5,7 @@ set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
 
-PATTERN='assume[[:space:]]*\(|admit[[:space:]]*\(|external_body|verifier::external\b|verifier\(external|exec_allows_no_decreases_clause|assume_specification|external_fn_specification|verifier::assume|--no-verify|no_auto_trigger_assume'
+PATTERN='assume[[:space:]]*\(|admit[[:space:]]*\(|external_body|verifier::external\b|verifier\(external|exec_allows_no_decreases_clause|assume_specification|external_fn_specification|verifier::assume|--no-verify|no_auto_trigger_assume|external_type_specification|\bunsafe\b'
 
 FILES=$(find src mutants -name '*.rs' 2>/dev/null)
 fail=0

@@ -1,3 +1,4 @@
 timestamp,result,errors,verified,target,note
 2026-10-11T23:20:25Z,pass,0,7,crate,spec.rs draft v1 typecheck (no impl yet);
 2026-10-11T23:20:31Z,pass,0,7,crate,spec.rs draft v1: explicit triggers;
+2026-10-12T00:04:32Z,pass,0,7,crate,spec v2 (approved): allow_post/allow_device_post; P4 covers sigma_hat>delta;

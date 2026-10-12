@@ -209,14 +209,26 @@ pub open spec fn apply_post(old: Seq<Entry>, new: Seq<Entry>, m: Notification) -
 }
 
 // P3 (exec, decide.rs): `fn allow(e: &Entry, now, delta, sigma_hat, critical) -> (b: bool)`
-//      ensures b == a8(*e, now, delta, sigma_hat, critical); no overflow/underflow.
-//      A cache-level wrapper `allow_device(&self, d: u32, ...)` ensures
-//      b == (d < N && a8(self@[d], ...)), so out-of-range ids deny.
+//      ensures allow_post(*e, now, delta, sigma_hat, critical, b); no overflow/underflow.
+pub open spec fn allow_post(e: Entry, now: u64, delta: u64, sigma_hat: u64, critical: bool, b: bool) -> bool {
+    b == a8(e, now, delta, sigma_hat, critical)
+}
 
-// P4 (lemmas.rs): deny by default.
+// P3 (exec, cache.rs): `fn allow_device(&self, d: u32, now, delta, sigma_hat, critical) -> (b: bool)`
+//      ensures allow_device_post(self@, d, now, delta, sigma_hat, critical, b);
+//      out-of-range device ids deny.
+pub open spec fn allow_device_post(
+    c: Seq<Entry>, d: u32, now: u64, delta: u64, sigma_hat: u64, critical: bool, b: bool,
+) -> bool {
+    b == ((d as int) < (N as int) && a8(c[d as int], now, delta, sigma_hat, critical))
+}
+
+// P4 (lemmas.rs): deny by default: unknown slot, Revoked status, active
+// critical event, or misconfiguration (sigma_hat > delta) always deny.
 pub open spec fn p4_deny_by_default() -> bool {
     forall|e: Entry, now: u64, delta: u64, sigma_hat: u64, critical: bool|
-        (e.status == Status::Unknown || e.status == Status::Revoked || critical)
+        (e.status == Status::Unknown || e.status == Status::Revoked || critical
+            || sigma_hat > delta)
             ==> !#[trigger] a8(e, now, delta, sigma_hat, critical)
 }
 

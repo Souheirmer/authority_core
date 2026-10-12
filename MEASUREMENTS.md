@@ -11,22 +11,30 @@
 
 Installed by `scripts/setup.sh`.
 
-## Sessions
+## Human time
 
-Human minutes are as reported by the human; wall-clock time is from the sandbox clock (UTC).
-Token/cost usage is not visible to the agent inside the sandbox; it is recorded only if the human supplies it.
+Human minutes are as reported by the human. Wall-clock times come from the sandbox clock (UTC). Token and cost usage are not visible to the agent; they are recorded only when the human supplies them.
 
-### Session 1: 2026-10-11
+| Session | Activity | Minutes | Notes |
+|---|---|---|---|
+| before 1 | Reading (brief) and setup (GitHub, session) | 3 | reported by human |
+| 1 | Approving the spec (reviewing v1, including reading the independent AI review) | 1 | reported by human |
 
-- Wall-clock start: 2026-10-11T23:15:20Z
-- Wall-clock end (stopped for spec approval): see the end-of-session entry
-- Human minutes at session start (before this session): _asked; awaiting answer_
-- Agent work this session: environment setup, workflow scripts, `src/spec.rs` draft v1. Stopped for spec approval.
-- Human minutes during this session, by activity: _asked at the spec-approval stop; awaiting answer_
+### Session 1: 2026-10-11/12
 
-| Activity | Minutes |
-|---|---|
-| Reading | ? |
-| Approving the spec | ? |
-| Prompting | ? |
-| Debugging | ? |
+- Agent work: 2026-10-11T23:15:20Z to 23:20:53Z (about 6 min): environment setup, scripts, `src/spec.rs` v1. Then stopped for spec approval.
+- Waiting for human review: 23:20:53Z to 2026-10-12T00:03:49Z (about 43 min elapsed; the human reports 1 min of active review).
+- Cost reported by human for the session: about $2 of cloud credits.
+
+### Session 2: 2026-10-12
+
+- Wall-clock start: 2026-10-12T00:03:49Z
+- Human minutes at session start: covered by the answers above (no additional time reported).
+
+## Independent AI review
+
+Kept separate from human minutes. These are reviews by an AI system other than the one doing the work, arranged by the human.
+
+| Review | Scope | Wall-clock (measured by human) | Result |
+|---|---|---|---|
+| 1 (spec v1) | Checked against rule A8 and the paper's soundness argument, plus scripts and logs | about 2 min | Approved with 4 changes (see `SPEC_CHANGES.md`, v2) |
