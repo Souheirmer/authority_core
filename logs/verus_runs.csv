@@ -27,3 +27,7 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-12T01:44:34Z,pass,0,67,crate,ExtA: 13 counterexample cells for S3/S5/AVPD (first attempt);,10.09,11.99,357940
 2026-10-12T01:44:55Z,fail,2,67,crate,SANITY (expected fail): false claims A3/S3 holds and A8/S3 violated;,9.06,10.91,360420
 2026-10-12T01:45:04Z,pass,0,67,crate,restore after sanity check;,9.87,11.23,357876
+2026-10-12T01:47:09Z,fail,1,77,crate,ExtA: lifecycle conjuncts in inv; S4 all rules; trivial S1/S2/S6/AV/S4 cells for A4/A6;,9.15,11.12,361312
+2026-10-12T01:47:25Z,pass,0,78,crate,ExtA: PushNotify step needs dev_inv of the pushing device;,10.2,12.39,359136
+2026-10-12T01:48:30Z,fail,1,86,crate,ExtA: S7 for A4/A6 (badGrants=0) and A7 (budget invariant at paper_params); first attempt;,9.65,12.76,367048
+2026-10-12T01:48:48Z,pass,0,87,crate,ExtA: S7/A7 push case only constrained in the Suspended/Revoked phase;,10.06,12.97,364592
