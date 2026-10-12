@@ -1,0 +1,17 @@
+error: to dereference a mutable reference parameter in a postcondition, disambiguate by wrapping it in either `old` or `final`
+  --> src/cache.rs:37:36
+   |
+37 |             apply_post(old(self)@, self@, *m),
+   |                                    ^^^^
+   |
+   = help: For information on the new mutable reference support, see: https://github.com/verus-lang/verus/blob/main/source/docs/migration-mut-ref.md
+
+error: to dereference a mutable reference parameter in a postcondition, disambiguate by wrapping it in either `old` or `final`
+  --> src/cache.rs:62:20
+   |
+62 |                 && self@ == apply_spec(old(self)@, decode_spec(bytes@)->Some_0),
+   |                    ^^^^
+   |
+   = help: For information on the new mutable reference support, see: https://github.com/verus-lang/verus/blob/main/source/docs/migration-mut-ref.md
+
+error: aborting due to 2 previous errors

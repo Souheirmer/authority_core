@@ -1,0 +1,7 @@
+error: expected `,`
+  --> src/decode.rs:28:32
+   |
+28 |             acc as nat < pow256((i - off) as nat),
+   |                                ^^^^^^^^^^^^^^^^^^
+
+error: aborting due to 1 previous error

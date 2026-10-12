@@ -1,0 +1,14 @@
+# Specification changes
+
+Any change to `src/spec.rs` after human approval is proposed to the human first and logged here with its reason.
+
+| Version | Date (UTC) | Change | Reason | Approved by human |
+|---|---|---|---|---|
+| v1 | 2026-10-11 | Initial draft (commit `b1516aa`). | — | Reviewed; approved with changes (see v2). |
+| v2 | 2026-10-12 | Added `allow_post` and `allow_device_post`, stating P3 formally (`b == a8(...)` for `allow`; `b == (d < N && a8(cache[d], ...))` for `allow_device`). Previously P3 was only described in a comment. | Human review of v1: P3 must be a formal spec function, not prose. | Yes (requested change 1) |
+| v2 | 2026-10-12 | Extended `p4_deny_by_default` with the disjunct `sigma_hat > delta`. | Human review of v1: the misconfiguration case that `a8` already denies must be part of the stated deny-by-default property. | Yes (requested change 2) |
+| v3 | 2026-10-12 | Added `handle_post(old, new, bytes, accepted)`: accepted ⇒ `decode_spec(bytes)` is `Some` and `new == apply_spec(old, decoded)`; not accepted ⇒ `new == old`. `Cache::handle` now `ensures handle_post(...)`. Its previous contract in `cache.rs` said the same thing; it now lives in the reviewed spec. | Human instruction after session 2: keep `Cache::handle` and bring its contract into `spec.rs`. | Yes (requested by human) |
+
+Non-spec changes from the v1 review (not in `spec.rs`): README states the model assumptions (requested change 3); `check_no_gaming.sh` also rejects `external_type_specification` and `unsafe` (requested change 4).
+
+Decisions confirmed in the v1 review, no change made: `sigma_hat <= delta` stays inside `a8`; P5 uses integer time without clamping (matches the paper's invariant); a `ver = 0` notification never fills an empty slot (registry versions start at 1); out-of-range device ids deny; "never panics" means Verus' overflow, bounds and termination checks.

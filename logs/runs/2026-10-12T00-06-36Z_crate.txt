@@ -1,0 +1,22 @@
+error: postcondition not satisfied
+  --> src/decide.rs:10:9
+   |
+10 |         allow_post(*e, now, delta, sigma_hat, critical, b),
+   |         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ failed this postcondition
+...
+24 |     now - e.orig < delta - sigma_hat
+   |     -------------------------------- at the end of the function body
+
+error: postcondition not satisfied
+  --> src/cache.rs:37:13
+   |
+37 |               apply_post(old(self)@, final(self)@, *m),
+   |               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ failed this postcondition
+...
+40 | /         if m.ver >= self.entries[i].ver {
+41 | |             self.entries[i] = Entry { status: m.status, ver: m.ver, orig: m.orig };
+42 | |         }
+   | |_________- at the end of the function body
+
+verification results:: 26 verified, 2 errors
+error: aborting due to 2 previous errors
