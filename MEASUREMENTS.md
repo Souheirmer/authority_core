@@ -34,7 +34,8 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 | 1 | Approving the spec: reviewing v1, including reading the independent AI review | 1 | reported by human |
 | 2 | Reading the review and sending instructions | 2 | reported by human |
 | 3 | Session 3 activity (not broken down) | 0.65 (39 s) | reported by human |
-| **Total** | | **6 min 39 s** | before session 1, sessions 1–3 |
+| before 4 | Uploading the model to GitHub; sending the session 4 prompt | 2 | reported by human |
+| **Total** | | **8 min 39 s** | before session 1, sessions 1–3, before session 4 |
 
 | Session | Cost (reported by human) |
 |---|---|
@@ -71,7 +72,7 @@ See columns `wall_s`, `cpu_s` and `max_rss_kb` in `logs/verus_runs.csv`. These a
 ### Session 4: 2026-10-12
 
 - Wall-clock start: 2026-10-12T00:53:28Z (clock).
-- Human minutes at session start: not yet asked (asked at the first stop).
+- Human minutes before session 4: 2 (uploading the model, sending the prompt).
 
 ## Independent AI review
 
@@ -83,5 +84,6 @@ Kept separate from human minutes. These are reviews by an AI system other than t
 | 2 (session 2) | Spec v2 diff, implementation, proofs, mutant, logs | 2026-10-12T00:10:56Z – 00:11:14Z (18 s) | Approved with follow-ups: put `handle` into the spec, compute the measurements, use exact times |
 | 3 (commit `da9933c`) | Resource measurement: scripts and logs, no source changes | 00:14:19Z – 00:14:20Z (1 s) | Approved |
 | 4 (session 3) | Spec v3 diff, `handle` contract, logs, no-gaming check | 00:20:30Z – 00:20:32Z (2 s) | Approved |
+| 5 (session 4 setup) | Model unchanged vs. upload, TraceGen wrapper, PdpPoll semantics, mapping questions | 00:57:09Z – 00:57:11Z (2 s) | Approved, with decisions 1(a) (verified `poll_update`) and 2(a) (`Suspended`, wire byte 2) |
 
 The review client runs on the human's MacBook Pro (Apple M1 Pro, 10 cores, 16 GB RAM, macOS 26.6.2). The reviewing model runs on the provider's servers, whose hardware is not visible.

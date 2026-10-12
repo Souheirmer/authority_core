@@ -28,13 +28,15 @@ pub const MSG_LEN: usize = 21;
 // Data model
 // ---------------------------------------------------------------------------
 
-/// Status of a cache slot. `Unknown` only ever denotes an empty slot; it cannot
-/// be produced by decoding a notification.
+/// Status of a cache slot. `Unknown` denotes an empty slot (the model's
+/// "Absent"); it cannot be produced by decoding a notification.
+/// `Suspended` mirrors the model's registry state "Suspended" (spec v4).
 #[derive(PartialEq, Eq, Clone, Copy, Debug)]
 pub enum Status {
     Unknown,
     Enrolled,
     Revoked,
+    Suspended,
 }
 
 /// One cache slot.
@@ -62,10 +64,12 @@ pub open spec fn empty_entry() -> Entry {
 }
 
 /// A notification is valid iff it addresses a slot that exists and carries a
-/// real status (Enrolled or Revoked). Exactly these are representable on the wire.
+/// real status (Enrolled, Revoked or Suspended). Exactly these are
+/// representable on the wire.
 pub open spec fn valid_notification(m: Notification) -> bool {
     &&& (m.device as int) < (N as int)
-    &&& (m.status == Status::Enrolled || m.status == Status::Revoked)
+    &&& (m.status == Status::Enrolled || m.status == Status::Revoked
+        || m.status == Status::Suspended)
 }
 
 /// Cache well-formedness: exactly N slots.
@@ -106,20 +110,20 @@ pub open spec fn device_field(s: Seq<u8>) -> nat { be_int(s.subrange(1, 5)) }
 pub open spec fn ver_field(s: Seq<u8>) -> nat { be_int(s.subrange(5, 13)) }
 pub open spec fn orig_field(s: Seq<u8>) -> nat { be_int(s.subrange(13, 21)) }
 
-/// Well-formed input: exactly 21 bytes, status byte 0 or 1, device id < N.
+/// Well-formed input: exactly 21 bytes, status byte 0, 1 or 2, device id < N.
 pub open spec fn well_formed(s: Seq<u8>) -> bool {
     &&& s.len() == MSG_LEN as int
-    &&& (status_byte(s) == 0 || status_byte(s) == 1)
+    &&& (status_byte(s) == 0 || status_byte(s) == 1 || status_byte(s) == 2)
     &&& device_field(s) < N as nat
 }
 
-/// Status byte meaning: 0 = Revoked, 1 = Enrolled.
+/// Status byte meaning: 0 = Revoked, 1 = Enrolled, 2 = Suspended.
 pub open spec fn status_of_byte(b: u8) -> Status {
-    if b == 1 { Status::Enrolled } else { Status::Revoked }
+    if b == 1 { Status::Enrolled } else if b == 2 { Status::Suspended } else { Status::Revoked }
 }
 
 pub open spec fn byte_of_status(st: Status) -> u8 {
-    if st == Status::Enrolled { 1 } else { 0 }
+    if st == Status::Enrolled { 1 } else if st == Status::Suspended { 2 } else { 0 }
 }
 
 /// Reference decoder.
@@ -156,6 +160,20 @@ pub open spec fn apply_spec(c: Seq<Entry>, m: Notification) -> Seq<Entry> {
     } else {
         c
     }
+}
+
+// ---------------------------------------------------------------------------
+// Poll answer (spec v4): mirrors PdpPoll(d), Provisioning.tla lines 268-279
+// ---------------------------------------------------------------------------
+
+/// poll_update(d, st, ver, now): the decision point's synchronous query of the
+/// registry returned (st, ver). Unconditionally overwrite slot d with
+/// (st, ver, orig := now), stamped with the decision point's OWN clock, exactly
+/// as PdpPoll sets pdpSt := reg[d], pdpVer := regVer[d], pdpOrig := now.
+/// There is no version check (the model has none). `st` may be Unknown
+/// (the model's "Absent", which the registry holds only at version 0).
+pub open spec fn poll_spec(c: Seq<Entry>, d: int, st: Status, ver: u64, now: u64) -> Seq<Entry> {
+    c.update(d, Entry { status: st, ver: ver, orig: now })
 }
 
 // ---------------------------------------------------------------------------
@@ -231,6 +249,16 @@ pub open spec fn allow_device_post(
 pub open spec fn handle_post(old: Seq<Entry>, new: Seq<Entry>, bytes: Seq<u8>, accepted: bool) -> bool {
     &&& accepted ==> (decode_spec(bytes) is Some && new == apply_spec(old, decode_spec(bytes)->Some_0))
     &&& !accepted ==> new == old
+}
+
+// Poll (exec, cache.rs, spec v4): `fn poll_update(&mut self, d: u32, st: Status, ver: u64, now: u64)`
+//      requires d < N; ensures poll_post(old(self)@, final(self)@, d, st, ver, now).
+//      Unlike apply, poll_update is not monotonic in ver by itself: it trusts
+//      the registry's answer, as PdpPoll does (the model's invariant
+//      CacheNotAheadOfRegistry, line 557, keeps regVer >= pdpVer there).
+pub open spec fn poll_post(old: Seq<Entry>, new: Seq<Entry>, d: u32, st: Status, ver: u64, now: u64) -> bool {
+    &&& new == poll_spec(old, d as int, st, ver, now)
+    &&& cache_wf(new)
 }
 
 // P4 (lemmas.rs): deny by default: unknown slot, Revoked status, active
