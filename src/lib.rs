@@ -9,6 +9,8 @@ pub mod decide;
 pub mod lemmas;
 pub mod system_spec;
 pub mod rules_spec;
+pub mod rules_proofs;
+pub mod rules_cex;
 
 use vstd::prelude::*;
 
