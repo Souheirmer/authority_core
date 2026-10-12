@@ -400,3 +400,226 @@ pub proof fn lemma_cell_avpd_a7_violated() ensures cell_violated(paper_params(),
 }
 
 } // verus!
+
+verus! {
+
+pub open spec fn suspend() -> Action { Action::RegChange { d: 0, to: RegSt::Suspended } }
+pub open spec fn access() -> Action { Action::RecordAccess { d: 0 } }
+
+// ---------------------------------------------------------------------------
+// Trace T10: Enroll; PdpPoll; Revoke     (cache "Enrolled", fresh; registry Revoked)
+// Trace T11: Enroll; PdpPoll; Suspend    (cache "Enrolled", fresh; registry Suspended)
+// Trace T12: Enroll; SyncFromRegistry; Suspend   (dev "Prov"; registry Suspended)
+// ---------------------------------------------------------------------------
+pub proof fn lemma_trace_change(rule: Rule, view: Action, change: Action) -> (r: (Seq<State>, Seq<Action>))
+    requires
+        view == poll() || view == sync(),
+        change == revoke() || change == suspend(),
+    ensures
+        is_execution(paper_params(), rule, r.0, r.1),
+        r.1 == seq![enroll(), view, change],
+        r.0.len() == 4,
+        r.0.last() == effect(paper_params(), effect(paper_params(), effect(paper_params(), init_state(paper_params()), enroll()), view), change),
+{
+    let p = paper_params();
+    let a = seq![enroll(), view, change];
+    let s0 = init_state(p);
+    let s1 = effect(p, s0, a[0]);
+    let s2 = effect(p, s1, a[1]);
+    let s3 = effect(p, s2, a[2]);
+    let ss = seq![s0, s1, s2, s3];
+    assert(step(p, rule, s0, a[0], s1));
+    assert(step(p, rule, s1, a[1], s2));
+    assert(step(p, rule, s2, a[2], s3));
+    assert forall|i: int| 0 <= i < a.len() implies #[trigger] step(p, rule, ss[i], a[i], ss[i + 1]) by {
+        if i == 0 {} else if i == 1 {} else {}
+    }
+    (ss, a)
+}
+
+// ---------------------------------------------------------------------------
+// Trace T13: Enroll; <SyncFromRegistry for A1, PdpPoll otherwise>; Revoke; RecordAccess x3
+//   three grants while revoked: badGrants = 3 = MAXBAD.
+// ---------------------------------------------------------------------------
+/// One RecordAccess while revoked: a grant (the rule allows) that adds one bad grant.
+/// A1, A2, A3, A5, A8 do not read useCnt, so they still allow afterwards.
+pub proof fn lemma_access_step(rule: Rule, s: State) -> (s2: State)
+    requires
+        rule == Rule::A1 || rule == Rule::A2 || rule == Rule::A3 || rule == Rule::A5 || rule == Rule::A8,
+        state_shape(paper_params(), s),
+        allow_rule(paper_params(), rule, s, 0),
+        s.reg[0] == RegSt::Revoked,
+        s.bad_grants[0] < 3,
+    ensures
+        step(paper_params(), rule, s, access(), s2),
+        s2 == effect(paper_params(), s, access()),
+        state_shape(paper_params(), s2),
+        allow_rule(paper_params(), rule, s2, 0),
+        s2.reg[0] == RegSt::Revoked,
+        s2.bad_grants[0] == s.bad_grants[0] + 1,
+{
+    let p = paper_params();
+    let s2 = effect(p, s, access());
+    assert(s2.dev == s.dev && s2.pdp_st == s.pdp_st && s2.pdp_age == s.pdp_age && s2.pdp_orig == s.pdp_orig
+        && s2.now == s.now && s2.active_ev == s.active_ev && s2.reg == s.reg && s2.link == s.link);
+    assert(step(p, rule, s, access(), s2));
+    s2
+}
+
+pub proof fn lemma_trace_damage(rule: Rule) -> (r: (Seq<State>, Seq<Action>))
+    requires
+        rule == Rule::A1 || rule == Rule::A2 || rule == Rule::A3 || rule == Rule::A5 || rule == Rule::A8,
+    ensures
+        is_execution(paper_params(), rule, r.0, r.1),
+        r.0.last().bad_grants[0] == 3,
+{
+    let p = paper_params();
+    let view = if rule == Rule::A1 { sync() } else { poll() };
+    let (ss3, a3) = lemma_trace_change(rule, view, revoke());
+    let s3 = ss3.last();
+    assert(Set::<nat>::empty().intersect(p.critical) =~= Set::<nat>::empty());
+    assert(s3.bad_grants[0] == 0 && s3.reg[0] == RegSt::Revoked);
+    assert(allow_rule(p, rule, s3, 0));
+    let s4 = lemma_access_step(rule, s3);
+    let s5 = lemma_access_step(rule, s4);
+    let s6 = lemma_access_step(rule, s5);
+    let a = a3 + seq![access(), access(), access()];
+    let ss = ss3 + seq![s4, s5, s6];
+    assert forall|i: int| 0 <= i < a.len() implies #[trigger] step(p, rule, ss[i], a[i], ss[i + 1]) by {
+        if i < 3 {
+            assert(ss[i] == ss3[i] && ss[i + 1] == ss3[i + 1] && a[i] == a3[i]);
+        } else if i == 3 {
+            assert(ss[i] == s3 && ss[i + 1] == s4 && a[i] == access());
+        } else if i == 4 {
+            assert(ss[i] == s4 && ss[i + 1] == s5 && a[i] == access());
+        } else {
+            assert(ss[i] == s5 && ss[i + 1] == s6 && a[i] == access());
+        }
+    }
+    assert(ss[0] == ss3[0]);
+    (ss, a)
+}
+
+// ---------------------------------------------------------------------------
+// Trace T14: Enroll                   (enrolled, link up, no event; nothing cached yet)
+// Trace T15: Enroll; Partition
+// ---------------------------------------------------------------------------
+pub proof fn lemma_trace_enroll(rule: Rule, partition: bool) -> (r: (Seq<State>, Seq<Action>))
+    ensures
+        is_execution(paper_params(), rule, r.0, r.1),
+        r.0.last().reg[0] == RegSt::Enrolled,
+        r.0.last().pdp_st[0] == RegSt::Absent,
+        r.0.last().dev[0] == DevSt::Unprov,
+        r.0.last().active_ev[0] == Set::<nat>::empty(),
+        r.0.last().link == (if partition { Link::Down } else { Link::Up }),
+{
+    let p = paper_params();
+    let s0 = init_state(p);
+    let s1 = effect(p, s0, enroll());
+    assert(step(p, rule, s0, enroll(), s1));
+    if partition {
+        let s2 = effect(p, s1, Action::Partition);
+        assert(step(p, rule, s1, Action::Partition, s2));
+        let a = seq![enroll(), Action::Partition];
+        let ss = seq![s0, s1, s2];
+        assert forall|i: int| 0 <= i < a.len() implies #[trigger] step(p, rule, ss[i], a[i], ss[i + 1]) by {
+            if i == 0 {} else {}
+        }
+        (ss, a)
+    } else {
+        let a = seq![enroll()];
+        let ss = seq![s0, s1];
+        assert forall|i: int| 0 <= i < a.len() implies #[trigger] step(p, rule, ss[i], a[i], ss[i + 1]) by {}
+        (ss, a)
+    }
+}
+
+// ---------------------------------------------------------------------------
+// The remaining 37 ✗ cells
+// ---------------------------------------------------------------------------
+
+/// S1 and S2 ✗ for A1 (trace T1: dev "Prov", registry Revoked)
+pub proof fn lemma_cell_s1_a1_violated() ensures cell_violated(paper_params(), Rule::A1, Prop::S1) {
+    let (ss, a) = lemma_trace_t1(Rule::A1);
+    assert(allow_rule(paper_params(), Rule::A1, ss.last(), 0));
+    lemma_violated_by(paper_params(), Rule::A1, Prop::S1, ss, a);
+}
+pub proof fn lemma_cell_s2_a1_violated() ensures cell_violated(paper_params(), Rule::A1, Prop::S2) {
+    let (ss, a) = lemma_trace_t1(Rule::A1);
+    assert(allow_rule(paper_params(), Rule::A1, ss.last(), 0));
+    lemma_violated_by(paper_params(), Rule::A1, Prop::S2, ss, a);
+}
+
+/// S1, S2 (trace T10) and S6 (trace T11) ✗ for the cache rules A2, A3, A5, A7, A8:
+/// the decision point still holds a fresh "Enrolled" after the registry changed.
+pub proof fn lemma_cell_cache_rules_violated(rule: Rule, prop: Prop)
+    requires
+        rule == Rule::A2 || rule == Rule::A3 || rule == Rule::A5 || rule == Rule::A7 || rule == Rule::A8,
+        prop == Prop::S1 || prop == Prop::S2 || prop == Prop::S6,
+    ensures
+        cell_violated(paper_params(), rule, prop),
+{
+    let p = paper_params();
+    let change = if prop == Prop::S6 { suspend() } else { revoke() };
+    let (ss, a) = lemma_trace_change(rule, poll(), change);
+    assert(Set::<nat>::empty().intersect(p.critical) =~= Set::<nat>::empty());
+    assert(allow_rule(p, rule, ss.last(), 0));
+    lemma_violated_by(p, rule, prop, ss, a);
+}
+
+/// S6 ✗ for A1 (trace T12)
+pub proof fn lemma_cell_s6_a1_violated() ensures cell_violated(paper_params(), Rule::A1, Prop::S6) {
+    let (ss, a) = lemma_trace_change(Rule::A1, sync(), suspend());
+    assert(allow_rule(paper_params(), Rule::A1, ss.last(), 0));
+    lemma_violated_by(paper_params(), Rule::A1, Prop::S6, ss, a);
+}
+
+/// S7 ✗ for A1 (trace T13 with SyncFromRegistry)
+pub proof fn lemma_cell_s7_a1_violated() ensures cell_violated(paper_params(), Rule::A1, Prop::S7) {
+    let (ss, a) = lemma_trace_damage(Rule::A1);
+    lemma_violated_by(paper_params(), Rule::A1, Prop::S7, ss, a);
+}
+
+/// S7 ✗ for A2, A3, A5, A8 (trace T13 with PdpPoll)
+pub proof fn lemma_cell_s7_cache_violated(rule: Rule)
+    requires
+        rule == Rule::A2 || rule == Rule::A3 || rule == Rule::A5 || rule == Rule::A8,
+    ensures
+        cell_violated(paper_params(), rule, Prop::S7),
+{
+    let (ss, a) = lemma_trace_damage(rule);
+    lemma_violated_by(paper_params(), rule, Prop::S7, ss, a);
+}
+
+/// AV and AVP ✗ for A1, A2, A3, A5, A7, A8 (trace T14: enrolled, nothing cached or synced yet)
+pub proof fn lemma_cell_av_avp_violated(rule: Rule, prop: Prop)
+    requires
+        rule != Rule::A4 && rule != Rule::A6,
+        prop == Prop::AV || prop == Prop::AVP,
+    ensures
+        cell_violated(paper_params(), rule, prop),
+{
+    let p = paper_params();
+    let (ss, a) = lemma_trace_enroll(rule, false);
+    assert(Set::<nat>::empty().intersect(p.critical) =~= Set::<nat>::empty());
+    assert(no_critical(p, ss.last(), 0));
+    assert(!allow_rule(p, rule, ss.last(), 0));
+    lemma_violated_by(p, rule, prop, ss, a);
+}
+
+/// AVP ✗ for A4, A6 (trace T15: enrolled but partitioned)
+pub proof fn lemma_cell_avp_failclosed_violated(rule: Rule)
+    requires
+        rule == Rule::A4 || rule == Rule::A6,
+    ensures
+        cell_violated(paper_params(), rule, Prop::AVP),
+{
+    let p = paper_params();
+    let (ss, a) = lemma_trace_enroll(rule, true);
+    assert(Set::<nat>::empty().intersect(p.critical) =~= Set::<nat>::empty());
+    assert(no_critical(p, ss.last(), 0));
+    assert(!allow_rule(p, rule, ss.last(), 0));
+    lemma_violated_by(p, rule, Prop::AVP, ss, a);
+}
+
+} // verus!

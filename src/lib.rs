@@ -11,6 +11,7 @@ pub mod system_spec;
 pub mod rules_spec;
 pub mod rules_proofs;
 pub mod rules_cex;
+pub mod rules_table;
 
 use vstd::prelude::*;
 

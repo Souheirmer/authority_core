@@ -31,3 +31,7 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-12T01:47:25Z,pass,0,78,crate,ExtA: PushNotify step needs dev_inv of the pushing device;,10.2,12.39,359136
 2026-10-12T01:48:30Z,fail,1,86,crate,ExtA: S7 for A4/A6 (badGrants=0) and A7 (budget invariant at paper_params); first attempt;,9.65,12.76,367048
 2026-10-12T01:48:48Z,pass,0,87,crate,ExtA: S7/A7 push case only constrained in the Suspended/Revoked phase;,10.06,12.97,364592
+2026-10-12T01:49:38Z,fail,1,97,crate,ExtA: remaining 37 counterexample cells (first attempt);,14.28,17.11,372700
+2026-10-12T01:50:13Z,fail,1,98,crate,ExtA: split S7 damage trace into a per-access lemma (rlimit);,13.43,16.24,375864
+2026-10-12T01:50:33Z,pass,0,99,crate,ExtA: lemma_trace_change exposes its action list and length;,14.04,16.75,372564
+2026-10-12T01:51:07Z,pass,0,102,crate,ExtA: lemma_paper_table (all 80 cells vs paper_expected);,14.03,17.03,375196
