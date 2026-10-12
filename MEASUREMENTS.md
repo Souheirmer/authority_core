@@ -75,6 +75,11 @@ See columns `wall_s`, `cpu_s` and `max_rss_kb` in `logs/verus_runs.csv`. These a
 
 - Wall-clock start: 2026-10-12T00:53:28Z (clock).
 - Human minutes before session 4: 2 (uploading the model, sending the prompt).
+- Agent turns (exact):
+  - 00:53:28Z (clock) to 00:55:55Z (clock) / 00:56Z (commit). Setup and mapping question; stopped for the human.
+  - 01:01:20Z (clock) to commit `cad3538`. Spec v4 draft; stopped for approval.
+  - 01:15:08Z (clock) to the Extension B commit (see `git log`). v4 verified, trace validation.
+- TLC and checker runs are logged in `logs/trace_runs.csv` (wall time, CPU time, peak RSS), on the same 4-core Xeon sandbox.
 
 ## Independent AI review
 
