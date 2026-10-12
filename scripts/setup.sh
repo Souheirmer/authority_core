@@ -42,6 +42,21 @@ if [ -n "$TOOLCHAIN" ]; then
   rustup toolchain install "$TOOLCHAIN" --profile minimal
 fi
 
+# 4. Java (for TLC) and the pinned TLA+ tools (github.com)
+TLA_VERSION="v1.7.4"
+TLA_SHA256="936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88"
+if ! command -v java >/dev/null 2>&1; then
+  (apt-get install -y openjdk-21-jre-headless || (apt-get update && apt-get install -y openjdk-21-jre-headless)) >/dev/null
+fi
+mkdir -p "$TOOLS/tla"
+TLA_JAR="$TOOLS/tla/tla2tools-${TLA_VERSION}.jar"
+if [ ! -f "$TLA_JAR" ]; then
+  curl -sSfL "https://github.com/tlaplus/tlaplus/releases/download/${TLA_VERSION}/tla2tools.jar" -o "$TLA_JAR"
+fi
+echo "${TLA_SHA256}  ${TLA_JAR}" | sha256sum -c --quiet
+java -version 2>&1 | grep -i version | head -1
+java -cp "$TLA_JAR" tlc2.TLC -h 2>&1 | grep -m1 'Version'
+
 "$VERUS_DIR/verus" --version
 echo "VERUS_DIR=$VERUS_DIR"
 echo "TOOLCHAIN=$TOOLCHAIN"

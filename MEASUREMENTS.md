@@ -38,7 +38,8 @@ Human minutes are as reported by the human. Costs are as reported by the human (
 |---|---|
 | 1 | about $2 of cloud credits |
 | 2 | about $1 |
-| 3 | about $1 (final figure as reported; mid-session the human had said "about $3 so far", which was not explained, so both are recorded) |
+| 3 | about $1 |
+| **Total, sessions 1–3** | **about $4** (confirmed by the human; the "about $3 so far" said mid-session 3 was the cumulative total of sessions 1–2) |
 
 ## Wall-clock time (exact, UTC)
 

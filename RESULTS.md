@@ -149,7 +149,7 @@ Details and sources are in `MEASUREMENTS.md`.
 - Review 3: 1 s.
 - Review 4: 2 s.
 
-**Cost** (reported by human): about $2 (session 1), about $1 (session 2), about $1 (session 3; the human had earlier said "about $3 so far" mid-session, unexplained). Total reported: about $4. Token usage is not visible to the agent.
+**Cost** (reported by human): about $2 (session 1), about $1 (session 2), about $1 (session 3). Total: about $4, confirmed by the human (the "about $3 so far" said mid-session 3 was the cumulative total). Token usage is not visible to the agent.
 
 ## 8. What did not work / caveats
 
