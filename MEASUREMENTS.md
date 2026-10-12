@@ -30,6 +30,9 @@ Human minutes are as reported by the human. Wall-clock times come from the sandb
 
 - Wall-clock start: 2026-10-12T00:03:49Z
 - Human minutes at session start: covered by the answers above (no additional time reported).
+- Agent work: spec v2, implementation, proofs, mutant, tests, RESULTS.md. Ended about 2026-10-12T00:10Z (about 6 min).
+- Human minutes at session end: _asked; awaiting answer_
+- Cost: _asked; awaiting answer_
 
 ## Independent AI review
 
