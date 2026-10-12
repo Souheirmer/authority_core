@@ -1,15 +1,17 @@
-timestamp,result,errors,verified,target,note
-2026-10-11T23:20:25Z,pass,0,7,crate,spec.rs draft v1 typecheck (no impl yet);
-2026-10-11T23:20:31Z,pass,0,7,crate,spec.rs draft v1: explicit triggers;
-2026-10-12T00:04:32Z,pass,0,7,crate,spec v2 (approved): allow_post/allow_device_post; P4 covers sigma_hat>delta;
-2026-10-12T00:06:01Z,fail,2,0,crate,first implementation attempt: decide/cache/decode/lemmas;
-2026-10-12T00:06:07Z,fail,2,0,crate,fix parse: parenthesize cast in invariant;
-2026-10-12T00:06:12Z,fail,1,27,crate,use final(self) for &mut post-state;
-2026-10-12T00:06:18Z,fail,1,27,crate,hoist off+n out of loop condition;
-2026-10-12T00:06:24Z,pass,0,28,crate,read_be: bound off+n via b.len();
-2026-10-12T00:06:35Z,fail,1,27,crate,SANITY (expected fail): planted bug < instead of <= in allow;
-2026-10-12T00:06:36Z,fail,2,26,crate,SANITY (expected fail): planted bug >= instead of > in apply;
-2026-10-12T00:06:37Z,fail,1,27,crate,restored after sanity checks;
-2026-10-12T00:06:42Z,pass,0,28,crate,restore planted bug in decide.rs (previous run still had it);
-2026-10-12T00:07:28Z,fail,1,12,mutants,receipt-timed mutant: P5-style attempt (expected fail) + proved negation;
-2026-10-12T00:08:49Z,pass,0,28,crate,final verification of crate + dep-info for line_count;
+timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
+2026-10-11T23:20:25Z,pass,0,7,crate,spec.rs draft v1 typecheck (no impl yet);,NA,NA,NA
+2026-10-11T23:20:31Z,pass,0,7,crate,spec.rs draft v1: explicit triggers;,NA,NA,NA
+2026-10-12T00:04:32Z,pass,0,7,crate,spec v2 (approved): allow_post/allow_device_post; P4 covers sigma_hat>delta;,NA,NA,NA
+2026-10-12T00:06:01Z,fail,2,0,crate,first implementation attempt: decide/cache/decode/lemmas;,NA,NA,NA
+2026-10-12T00:06:07Z,fail,2,0,crate,fix parse: parenthesize cast in invariant;,NA,NA,NA
+2026-10-12T00:06:12Z,fail,1,27,crate,use final(self) for &mut post-state;,NA,NA,NA
+2026-10-12T00:06:18Z,fail,1,27,crate,hoist off+n out of loop condition;,NA,NA,NA
+2026-10-12T00:06:24Z,pass,0,28,crate,read_be: bound off+n via b.len();,NA,NA,NA
+2026-10-12T00:06:35Z,fail,1,27,crate,SANITY (expected fail): planted bug < instead of <= in allow;,NA,NA,NA
+2026-10-12T00:06:36Z,fail,2,26,crate,SANITY (expected fail): planted bug >= instead of > in apply;,NA,NA,NA
+2026-10-12T00:06:37Z,fail,1,27,crate,restored after sanity checks;,NA,NA,NA
+2026-10-12T00:06:42Z,pass,0,28,crate,restore planted bug in decide.rs (previous run still had it);,NA,NA,NA
+2026-10-12T00:07:28Z,fail,1,12,mutants,receipt-timed mutant: P5-style attempt (expected fail) + proved negation;,NA,NA,NA
+2026-10-12T00:08:49Z,pass,0,28,crate,final verification of crate + dep-info for line_count;,NA,NA,NA
+2026-10-12T00:11:02Z,pass,0,28,crate,verify.sh now records wall/cpu/peak RSS;,1.61,2.24,324628
+2026-10-12T00:11:03Z,fail,1,12,mutants,re-run mutant with resource measurement (expected fail);,0.82,0.92,315468

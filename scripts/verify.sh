@@ -2,7 +2,8 @@
 # The ONLY sanctioned way to run Verus in this project.
 # Usage: scripts/verify.sh [crate|mutants] "short note"
 # Appends one line per run to logs/verus_runs.csv:
-#   timestamp,result,errors,verified,target,note
+#   timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
+# wall_s / cpu_s (user+sys) / max_rss_kb (peak resident memory) come from /usr/bin/time -v.
 set -uo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 cd "$ROOT"
@@ -11,7 +12,7 @@ NOTE="${2:-}"
 VERUS="$ROOT/.tools/verus-x86-linux/verus"
 LOG="$ROOT/logs/verus_runs.csv"
 mkdir -p logs
-[ -f "$LOG" ] || echo "timestamp,result,errors,verified,target,note" > "$LOG"
+[ -f "$LOG" ] || echo "timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb" > "$LOG"
 
 TS=$(date -u +%FT%TZ)
 GAMING_OUT=$(scripts/check_no_gaming.sh 2>&1); GAMING_RC=$?
@@ -24,7 +25,12 @@ case "$TARGET" in
 esac
 
 # EXTRA_VERUS_ARGS (optional), e.g. "--emit=dep-info" for line counting
-OUT=$("$VERUS" "$ROOTFILE" --crate-type=lib ${EXTRA_VERUS_ARGS:-} 2>&1); RC=$?
+TIMEF=$(mktemp)
+OUT=$(/usr/bin/time -v -o "$TIMEF" "$VERUS" "$ROOTFILE" --crate-type=lib ${EXTRA_VERUS_ARGS:-} 2>&1); RC=$?
+WALL=$(awk -F': ' '/Elapsed \(wall clock\)/{n=split($2,a,":"); s=0; for(i=1;i<=n;i++) s=s*60+a[i]; print s}' "$TIMEF")
+CPU=$(awk -F': ' '/User time/{u=$2} /System time/{s=$2} END{printf "%.2f", u+s}' "$TIMEF")
+RSS=$(awk -F': ' '/Maximum resident set size/{print $2}' "$TIMEF")
+rm -f "$TIMEF"
 echo "$OUT"
 mkdir -p logs/runs
 echo "$OUT" > "logs/runs/${TS//:/-}_${TARGET}.txt"
@@ -39,6 +45,7 @@ fi
 if [ "$RC" -eq 0 ] && [ "$GAMING_RC" -eq 0 ] && [ "$ERRORS" -eq 0 ]; then RESULT=pass; else RESULT=fail; fi
 [ "$GAMING_RC" -ne 0 ] && NOTE="GAMING-CHECK-FAILED; $NOTE"
 CLEAN_NOTE=$(echo "$NOTE" | tr ',\n' ';;')
-echo "$TS,$RESULT,$ERRORS,$VERIFIED,$TARGET,$CLEAN_NOTE" >> "$LOG"
-echo "== logged: $TS,$RESULT,$ERRORS,$VERIFIED,$TARGET,$CLEAN_NOTE"
+ROW="$TS,$RESULT,$ERRORS,$VERIFIED,$TARGET,$CLEAN_NOTE,$WALL,$CPU,$RSS"
+echo "$ROW" >> "$LOG"
+echo "== logged: $ROW"
 [ "$RESULT" = pass ]

@@ -1,7 +1,7 @@
 # Results
 
 Verus `0.2026.10.04.426d8b0`, Rust `1.98.1`, Ubuntu 24.04 x86_64. Specification: `src/spec.rs` v2 (human-approved, see `SPEC_CHANGES.md`).
-Final verification of the crate: **28 verified, 0 errors** (`logs/verus_runs.csv`, run 2026-10-12T00:08:49Z). The no-gaming check passed on every run, with exactly one trusted `external_body` (`signature_ok`).
+Final verification of the crate: **28 verified, 0 errors** (`logs/verus_runs.csv`, runs 2026-10-12T00:08:49Z and 00:11:02Z). The no-gaming check passed on every run, with exactly one trusted `external_body` (`signature_ok`).
 
 ## 1. What was proved (accepted by Verus)
 
@@ -48,7 +48,7 @@ The mutant crate (`mutants/`) is not included in these counts.
 
 ## 5. Verifier runs (`logs/verus_runs.csv`)
 
-**Total 14 runs: 6 passed, 8 failed.**
+**Total 16 runs: 7 passed, 9 failed.** Runs 15 and 16 (00:11:02Z, 00:11:03Z) repeat the crate and mutant verification with resource measurement and show unchanged results: crate 28 verified, 0 errors, 1.61 s wall, 2.24 s CPU, 317 MiB peak RSS; mutant 12 verified, 1 error (expected), 0.82 s wall, 0.92 s CPU, 308 MiB peak RSS. Hardware: 4-core Intel Xeon @ 2.80GHz, 15 GiB RAM (see `MEASUREMENTS.md`).
 
 | Failed run | Kind |
 |---|---|
@@ -60,8 +60,9 @@ The mutant crate (`mutants/`) is not included in these counts.
 | 00:06:36Z | Deliberate sanity check: planted bug in `apply`. `decide.rs` still had the first planted bug because a `git checkout` restore failed on an uncommitted file, so 2 errors. |
 | 00:06:37Z | Same leftover planted bug in `decide.rs` (the note says "restored", which was wrong); fixed in the next run |
 | 00:07:28Z | Expected: the mutant crate, whose P5-style lemma fails |
+| 00:11:03Z | Expected: the same mutant run, repeated with resource measurement |
 
-So: 4 development failures, 3 failures caused by the deliberate sanity check, 1 expected mutant failure. No proof needed manual hints beyond what is in the source; the first passing run of the full implementation came 5 runs (23 s) after the first attempt.
+So: 4 development failures, 3 failures caused by the deliberate sanity check, 2 expected mutant failures. No proof needed manual hints beyond what is in the source; the first passing run of the full implementation came 5 runs (23 s) after the first attempt.
 
 ## 6. Receipt-timed mutant
 

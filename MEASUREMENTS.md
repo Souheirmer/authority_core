@@ -11,6 +11,17 @@
 
 Installed by `scripts/setup.sh`.
 
+## Hardware
+
+| Machine | Role | CPU | Cores | RAM |
+|---|---|---|---|---|
+| Cloud sandbox (agent + Verus) | runs the agent's tools and every Verus run | Intel(R) Xeon(R) Processor @ 2.80GHz (`lscpu`) | 4 (`nproc`; 4 cores per socket, 1 thread per core) | 15 GiB (`free -h`), no swap |
+| Human reviewer's machine | runs the independent AI review client | Apple M1 Pro | 10 | 16 GB (macOS 26.6.2) |
+
+The models themselves run on the providers' servers, whose hardware is not visible to either side.
+
+Each Verus run's wall time, CPU time (user + system) and peak resident memory are measured with `/usr/bin/time -v` by `scripts/verify.sh` and stored in `logs/verus_runs.csv` (columns `wall_s`, `cpu_s`, `max_rss_kb`). Runs logged before 2026-10-12T00:11Z predate this and have `NA` in those columns.
+
 ## Human time
 
 Human minutes are as reported by the human. Wall-clock times come from the sandbox clock (UTC). Token and cost usage are not visible to the agent; they are recorded only when the human supplies them.
@@ -41,3 +52,5 @@ Kept separate from human minutes. These are reviews by an AI system other than t
 | Review | Scope | Wall-clock (measured by human) | Result |
 |---|---|---|---|
 | 1 (spec v1) | Checked against rule A8 and the paper's soundness argument, plus scripts and logs | about 2 min | Approved with 4 changes (see `SPEC_CHANGES.md`, v2) |
+
+The review client runs on the human's MacBook Pro (Apple M1 Pro, 10 cores, 16 GB RAM, macOS 26.6.2); the reviewing model runs on the provider's servers, whose hardware is not visible.

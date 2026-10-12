@@ -12,6 +12,11 @@ ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TOOLS="${ROOT}/.tools"
 mkdir -p "$TOOLS"
 
+# 0. GNU time (used by scripts/verify.sh to measure each Verus run)
+if [ ! -x /usr/bin/time ]; then
+  (apt-get install -y time || (apt-get update && apt-get install -y time)) >/dev/null
+fi
+
 # 1. Rust via rustup (static.rust-lang.org)
 if ! command -v rustup >/dev/null 2>&1; then
   curl -sSfL https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init -o "$TOOLS/rustup-init"
