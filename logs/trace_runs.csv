@@ -2,4 +2,4 @@ timestamp,tool,result,target,note,wall_s,cpu_s,max_rss_kb,traces,states
 2026-10-12T00:54:26Z,tlc,ok,A8_OriginLease__S3_BoundedRevocation.cfg,EXPLORATORY (run by hand before this log existed; time/memory not measured): sanity check of TLC v1.7.4 on the paper's A8/S3 config; 34652 distinct states; no violation,2,NA,NA,NA,204847
 2026-10-12T00:54:57Z,tlc,error,probe.cfg,EXPLORATORY (by hand; not measured): first TraceGen simulation; failed because the output directory did not exist,NA,NA,NA,0,1
 2026-10-12T00:55:01Z,tlc,ok,probe.cfg,EXPLORATORY (by hand; not measured): TraceGen simulation num=3 depth 25 to inspect the trace format,0,NA,NA,3,1226
-2026-10-12T00:56:00Z,tlc,ok,probe.cfg,EXPLORATORY (by hand; not measured; timestamp approximate to the minute): TraceGen simulation num=300 depth 30 seed 7 to measure poll/Suspended frequency for the mapping question,NA,NA,NA,300,NA
+2026-10-12T00:55:30Z,tlc,ok,probe.cfg,EXPLORATORY (by hand; not measured; timestamp approximate: it ran between 00:55:01Z and 00:55:55Z; first logged as 00:56:00Z by mistake): TraceGen simulation num=300 depth 30 seed 7 to measure poll/Suspended frequency for the mapping question,NA,NA,NA,300,NA

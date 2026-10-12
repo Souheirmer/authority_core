@@ -8,6 +8,8 @@
 | Verus | `0.2026.10.04.426d8b0` (commit `426d8b01e7ffb910a36c15e1f870ff985bb61eef`), release asset `verus-0.2026.10.04.426d8b0-x86-linux.zip` |
 | Rust toolchain required by Verus | `1.98.1-x86_64-unknown-linux-gnu` |
 | Z3 | bundled with the Verus release |
+| Java (for TLC) | OpenJDK `21.0.12.1` (2026-08-18), preinstalled in the sandbox; `setup.sh` installs `openjdk-21-jre-headless` if missing |
+| TLA+ tools | `tla2tools.jar` from release `v1.7.4` (TLC 2.19 of 08 August 2024, rev 5a47802), SHA-256 `936a262061c914694dfd669a543be24573c45d5aa0ff20a8b96b23d01e050e88` (checked by `setup.sh`). The `v1.8.0` tag was not used: its asset is a rolling build (TLC 2026.10.06), so it can't be pinned. |
 
 Installed by `scripts/setup.sh`.
 
@@ -65,6 +67,11 @@ Session 2 spans two agent turns; the second turn (resource measurement) is count
 ### Verus run resources
 
 See columns `wall_s`, `cpu_s` and `max_rss_kb` in `logs/verus_runs.csv`. These are measured from 2026-10-12T00:11:02Z on; earlier runs show `NA`.
+
+### Session 4: 2026-10-12
+
+- Wall-clock start: 2026-10-12T00:53:28Z (clock).
+- Human minutes at session start: not yet asked (asked at the first stop).
 
 ## Independent AI review
 
