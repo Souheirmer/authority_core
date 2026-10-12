@@ -54,13 +54,11 @@ impl Cache {
         }
     }
 
-    /// Convenience composition (not one of P1-P5): decode, check the trusted
-    /// signature, then apply. On any failure the cache is unchanged.
+    /// Decode, check the trusted signature, then apply (contract: handle_post,
+    /// spec v3). On any failure the cache is unchanged.
     pub fn handle(&mut self, bytes: &[u8], sig: &[u8]) -> (accepted: bool)
         ensures
-            accepted ==> decode_spec(bytes@) is Some
-                && final(self)@ == apply_spec(old(self)@, decode_spec(bytes@)->Some_0),
-            !accepted ==> final(self)@ == old(self)@,
+            handle_post(old(self)@, final(self)@, bytes@, accepted),
     {
         match decode(bytes) {
             Some(m) => {

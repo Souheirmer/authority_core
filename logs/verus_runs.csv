@@ -15,3 +15,6 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-12T00:08:49Z,pass,0,28,crate,final verification of crate + dep-info for line_count;,NA,NA,NA
 2026-10-12T00:11:02Z,pass,0,28,crate,verify.sh now records wall/cpu/peak RSS;,1.61,2.24,324628
 2026-10-12T00:11:03Z,fail,1,12,mutants,re-run mutant with resource measurement (expected fail);,0.82,0.92,315468
+2026-10-12T00:18:14Z,pass,0,28,crate,spec v3: handle_post in spec.rs; handle ensures it;,3.9,4.55,318512
+2026-10-12T00:18:23Z,fail,1,12,mutants,re-run mutant after spec v3 (expected fail on attempt lemma only);,0.91,1.00,312596
+2026-10-12T00:18:24Z,pass,0,28,crate,final verification (spec v3) + dep-info for line_count;,2.46,3.08,323244

@@ -223,6 +223,16 @@ pub open spec fn allow_device_post(
     b == ((d as int) < (N as int) && a8(c[d as int], now, delta, sigma_hat, critical))
 }
 
+// handle (exec, cache.rs, spec v3): `fn handle(&mut self, bytes: &[u8], sig: &[u8]) -> (accepted: bool)`
+//      ensures handle_post(old(self)@, final(self)@, bytes@, accepted).
+//      Decode, check the trusted signature, then apply. Accepted only if the
+//      bytes are well formed (and signature_ok returned true, which is trusted
+//      and unspecified); on rejection the cache is unchanged.
+pub open spec fn handle_post(old: Seq<Entry>, new: Seq<Entry>, bytes: Seq<u8>, accepted: bool) -> bool {
+    &&& accepted ==> (decode_spec(bytes) is Some && new == apply_spec(old, decode_spec(bytes)->Some_0))
+    &&& !accepted ==> new == old
+}
+
 // P4 (lemmas.rs): deny by default: unknown slot, Revoked status, active
 // critical event, or misconfiguration (sigma_hat > delta) always deny.
 pub open spec fn p4_deny_by_default() -> bool {
