@@ -121,4 +121,4 @@ Environment: `ubuntu:24.04` linux/amd64 container under emulation on the human's
 | Activity | Human minutes | Source |
 |---|---|---|
 | Instruction to tag the pilot and add the signature path | to be reported by the human | — |
-| Approval of spec v5 | pending | — |
+| Approval of spec v5 (with the `pk` assumption and P7 scope) | to be reported by the human | approved 2026-10-14 |

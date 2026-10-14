@@ -44,3 +44,4 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-14T00:50:38Z,pass,0,112,crate,spec v5: signed input path (sig_valid; handle_post with pk and sig);,49.77,66.76,582856
 2026-10-14T00:51:36Z,fail,1,111,crate,planted bug: handle applies without checking the signature (expected to fail);,44.94,62.55,576900
 2026-10-14T00:52:29Z,pass,0,112,crate,re-run after removing the planted bug;,47.89,64.70,582356
+2026-10-14T01:34:12Z,pass,0,112,crate,spec v5 approved: comment-only additions (pk assumption; P7 scope);,48.12,65.45,582240

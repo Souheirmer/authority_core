@@ -24,6 +24,7 @@ The rule is implemented exactly as stated; these are the assumptions under which
 - **Configuration.** The paper's precondition `sigma_hat <= delta` is not assumed. It is a conjunct of `a8` instead, so a misconfigured decision point (`sigma_hat > delta`) denies every request.
 - **Versions start at 1.** An empty slot holds `(Unknown, ver = 0, orig = 0)`, and `apply` overwrites only on a strictly greater version, so the registry's first record for a device must have `ver >= 1`. A `ver = 0` notification is ignored.
 - **Signatures (spec v5).** `signature_ok(pk, bytes, sig)` is trusted (`#[verifier::external_body]`, the only one in the crate): its contract is that it returns exactly `sig_valid(pk, bytes, sig)`. Its body calls `src/sig_impl.rs`, a thin unverified wrapper over the `ed25519-dalek` library (pinned 2.2.0), which is also trusted. Ed25519's cryptographic security is an assumption. Under Verus a stub replaces the wrapper, so the proofs depend only on the contract.
+- **Authority key (spec v5).** `pk` is the configured authority key, supplied by trusted configuration or caller code; an incoming notification cannot select it. P7 holds for the signed `Cache::handle` path only; `poll_update` (spec v4) is a separate, unsigned interface that trusts the registry's answer.
 
 ## Usage
 

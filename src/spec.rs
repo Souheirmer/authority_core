@@ -255,6 +255,11 @@ pub uninterp spec fn sig_valid(pk: Seq<u8>, bytes: Seq<u8>, sig: Seq<u8>) -> boo
 //      P7 (authenticated input): decode, check the signature under the pinned
 //      authority key `pk`, then apply. Accepted only if the bytes are well
 //      formed AND sig_valid(pk, bytes, sig); on rejection the cache is unchanged.
+//      Assumption (approved with v5): `pk` is the configured authority key,
+//      supplied by trusted configuration or caller code; the incoming
+//      notification cannot select it. P7 is a guarantee of this signed path
+//      only, not of every cache-update interface (`poll_update` trusts the
+//      registry's answer, as PdpPoll does).
 //      Replay and expiry are not handled here: a replayed (older or equal)
 //      version is a no-op by P2, and an old origin stamp denies by A8 (P3).
 pub open spec fn handle_post(

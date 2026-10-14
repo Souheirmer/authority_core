@@ -199,6 +199,8 @@ Baseline: tag `v0-pilot` (commit `e5125e0`) is the pilot as cited in the ARIA pr
 | `tests/signed_input.rs`, real Ed25519 signatures | **8 tests pass**: correct signature accepted; each of the 21 bytes altered rejected; altered signature rejected; wrong key rejected; signature without the domain prefix rejected; truncated key or signature rejected; an authentic but older (replayed) notification cannot restore revoked authority; the lease expires at `now - orig > delta - sigma_hat` | tests, not proofs |
 | Earlier tests (P6, mutant trace, 50 counterexamples) | still pass | tests |
 
+**Scope (as approved).** P7 is a guarantee of the signed `Cache::handle` path, not of every cache-update interface: `poll_update` (spec v4) is unsigned and trusts the registry's answer. It assumes `pk` is the configured authority key supplied by trusted configuration or caller code, which an incoming notification cannot select.
+
 **What is trusted.** `signature_ok`'s contract; the wrapper `src/sig_impl.rs`; the `ed25519-dalek` 2.2.0 library; Ed25519's security; the pinned key being the authority's. Replay and expiry are **not** new proofs: replay is a no-op by P2 (strictly increasing versions) and expiry is A8 (P3); the tests show that this holds on the signed path. The current time is an input to `allow_device`; a trusted clock with error at most `sigma <= sigma_hat` remains an assumption (README).
 
 **Environment.** Same pinned Verus `0.2026.10.04.426d8b0` and Rust `1.98.1`, run in an `ubuntu:24.04` linux/amd64 container (emulated) on an Apple M1 Pro; wall times in `logs/verus_runs.csv` (about 45–51 s per run) reflect the emulation and are not comparable with sessions 1–4.
