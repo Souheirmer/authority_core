@@ -65,15 +65,15 @@ impl Cache {
         }
     }
 
-    /// Decode, check the trusted signature, then apply (contract: handle_post,
-    /// spec v3). On any failure the cache is unchanged.
-    pub fn handle(&mut self, bytes: &[u8], sig: &[u8]) -> (accepted: bool)
+    /// Decode, check the signature under the pinned authority key `pk`, then
+    /// apply (contract: handle_post, spec v5). On any failure the cache is unchanged.
+    pub fn handle(&mut self, pk: &[u8], bytes: &[u8], sig: &[u8]) -> (accepted: bool)
         ensures
-            handle_post(old(self)@, final(self)@, bytes@, accepted),
+            handle_post(old(self)@, final(self)@, pk@, bytes@, sig@, accepted),
     {
         match decode(bytes) {
             Some(m) => {
-                if crate::signature_ok(bytes, sig) {
+                if crate::signature_ok(pk, bytes, sig) {
                     self.apply(&m);
                     true
                 } else {

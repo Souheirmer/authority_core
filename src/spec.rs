@@ -241,13 +241,27 @@ pub open spec fn allow_device_post(
     b == ((d as int) < (N as int) && a8(c[d as int], now, delta, sigma_hat, critical))
 }
 
-// handle (exec, cache.rs, spec v3): `fn handle(&mut self, bytes: &[u8], sig: &[u8]) -> (accepted: bool)`
-//      ensures handle_post(old(self)@, final(self)@, bytes@, accepted).
-//      Decode, check the trusted signature, then apply. Accepted only if the
-//      bytes are well formed (and signature_ok returned true, which is trusted
-//      and unspecified); on rejection the cache is unchanged.
-pub open spec fn handle_post(old: Seq<Entry>, new: Seq<Entry>, bytes: Seq<u8>, accepted: bool) -> bool {
-    &&& accepted ==> (decode_spec(bytes) is Some && new == apply_spec(old, decode_spec(bytes)->Some_0))
+// Signature predicate (spec v5). `sig_valid(pk, bytes, sig)` means: `sig` is a
+//      valid Ed25519 signature (strict verification) by the 32-byte public key
+//      `pk` over SIG_DOMAIN || bytes, where SIG_DOMAIN is the 30-byte ASCII
+//      string "authority_core/notification/v1" (src/sig_impl.rs). It is
+//      uninterpreted: the proofs use only that the trusted `signature_ok`
+//      returns exactly this value. The cryptographic security of Ed25519 is an
+//      assumption, not a proof obligation.
+pub uninterp spec fn sig_valid(pk: Seq<u8>, bytes: Seq<u8>, sig: Seq<u8>) -> bool;
+
+// handle (exec, cache.rs, spec v5): `fn handle(&mut self, pk: &[u8], bytes: &[u8], sig: &[u8]) -> (accepted: bool)`
+//      ensures handle_post(old(self)@, final(self)@, pk@, bytes@, sig@, accepted).
+//      P7 (authenticated input): decode, check the signature under the pinned
+//      authority key `pk`, then apply. Accepted only if the bytes are well
+//      formed AND sig_valid(pk, bytes, sig); on rejection the cache is unchanged.
+//      Replay and expiry are not handled here: a replayed (older or equal)
+//      version is a no-op by P2, and an old origin stamp denies by A8 (P3).
+pub open spec fn handle_post(
+    old: Seq<Entry>, new: Seq<Entry>, pk: Seq<u8>, bytes: Seq<u8>, sig: Seq<u8>, accepted: bool,
+) -> bool {
+    &&& accepted ==> (decode_spec(bytes) is Some && sig_valid(pk, bytes, sig)
+        && new == apply_spec(old, decode_spec(bytes)->Some_0))
     &&& !accepted ==> new == old
 }
 

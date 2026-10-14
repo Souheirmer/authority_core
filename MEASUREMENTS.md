@@ -113,3 +113,12 @@ Kept separate from human minutes. These are reviews by an AI system other than t
 | 9 (Extension A) | Spec files unchanged since approval, `lemma_paper_table` statement, no-gaming check, final verification log, mutant re-run, merge | 01:56:49Z – 01:56:57Z (8 s) | Approved |
 
 The review client runs on the human's MacBook Pro (Apple M1 Pro, 10 cores, 16 GB RAM, macOS 26.6.2). The reviewing model runs on the provider's servers, whose hardware is not visible.
+
+## Session 5 (2026-10-14): signed input path
+
+Environment: `ubuntu:24.04` linux/amd64 container under emulation on the human's Apple M1 Pro (16 GB); same pinned Verus and Rust. Verus runs (wall / CPU / peak RSS, from `logs/verus_runs.csv`): baseline 51.2 s / 68.3 s / 569 MiB; spec v5 49.8 s / 66.8 s / 569 MiB; planted bug 44.9 s / 62.6 s / 563 MiB; re-run 47.9 s / 64.7 s / 569 MiB. One Verus attempt of spec v5, accepted first time; no failed attempts other than the planted bug.
+
+| Activity | Human minutes | Source |
+|---|---|---|
+| Instruction to tag the pilot and add the signature path | to be reported by the human | — |
+| Approval of spec v5 | pending | — |

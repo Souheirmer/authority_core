@@ -40,3 +40,7 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-12T01:52:39Z,pass,0,112,crate,restore exec rules after sanity check;,13.56,16.43,377028
 2026-10-12T01:53:41Z,pass,0,112,crate,ExtA final: full crate + dep-info for line_count;,14.32,17.64,379072
 2026-10-12T01:53:55Z,fail,1,13,mutants,mutant re-run after ExtA (spec.rs unchanged; expected fail on attempt lemma only);,0.77,0.88,315248
+2026-10-14T00:48:36Z,pass,0,112,crate,baseline re-run in local amd64 container before the signed-input change;,51.17,68.33,583072
+2026-10-14T00:50:38Z,pass,0,112,crate,spec v5: signed input path (sig_valid; handle_post with pk and sig);,49.77,66.76,582856
+2026-10-14T00:51:36Z,fail,1,111,crate,planted bug: handle applies without checking the signature (expected to fail);,44.94,62.55,576900
+2026-10-14T00:52:29Z,pass,0,112,crate,re-run after removing the planted bug;,47.89,64.70,582356

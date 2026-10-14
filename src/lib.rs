@@ -13,19 +13,22 @@ pub mod rules_proofs;
 pub mod rules_cex;
 pub mod rules_table;
 pub mod rules_exec;
+pub mod sig_impl;
 
 use vstd::prelude::*;
 
 verus! {
 
-/// TRUSTED ASSUMPTION (the only one in this crate): signature verification of a
-/// 21-byte notification. Out of scope for verification; no specification is
-/// given, so nothing proved depends on its result. This placeholder rejects
-/// everything (deny by default) until a real verifier is plugged in.
+/// TRUSTED ASSUMPTION (the only external_body in this crate): Ed25519
+/// verification of a 21-byte notification under the authority key `pk`
+/// (spec v5). Its contract is that it returns exactly `sig_valid`; the body
+/// calls the trusted wrapper in `sig_impl.rs`, which calls ed25519-dalek.
 #[verifier::external_body]
-pub fn signature_ok(bytes: &[u8], sig: &[u8]) -> bool {
-    let _ = (bytes, sig);
-    false
+pub fn signature_ok(pk: &[u8], bytes: &[u8], sig: &[u8]) -> (b: bool)
+    ensures
+        b == crate::spec::sig_valid(pk@, bytes@, sig@),
+{
+    crate::sig_impl::verify(pk, bytes, sig)
 }
 
 } // verus!
