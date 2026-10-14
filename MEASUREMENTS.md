@@ -129,3 +129,12 @@ Same environment as session 5. Verus runs (wall / CPU / peak RSS): first attempt
 | Activity | Human minutes | Source |
 |---|---|---|
 | Instruction to build the D witness, and approval of the D-witness spec with clarifications | about 2 | reported by human (whole session) |
+
+## Session 7 (2026-10-14): B witness
+
+Same environment as session 5. Verus runs (wall / CPU / peak RSS): first attempt 51.4 s / 70.8 s / 577 MiB (passed); planted bug B-1 and B-2 (both rejected, see `logs/verus_runs.csv`); final 52.0 s / 71.4 s / 577 MiB. The spec, code and proofs verified on the first attempt; no failed attempts other than the two planted bugs.
+
+| Activity | Human minutes | Source |
+|---|---|---|
+| Instruction to build the B witness (given with the D approval) | included in session 6 | reported by human |
+| Approval of the B-witness spec | pending | — |

@@ -222,3 +222,23 @@ A small **feasibility witness** for the command-gate proposal, not the proposed 
 | Worked trace (`tests/gate_witness.rs`): after replacement with F1 or F2 possible, site-wide curtailment admitted; F1 and F2 setpoints withheld; old incarnation withheld; another asset unaffected; after assumed-current truthful evidence for F1, the F1 setpoint admitted; expiry; out-of-range asset; initial uncertainty | | **4 tests pass** | tests, not proofs |
 
 **Not covered (stated limits).** Evidence supplied to pruning is assumed currently true for the current incarnation; its signatures and chronology are not checked, and replacement inputs are not authenticated (the P7 signed path could carry them later). Command authority and deadline metadata are trusted input, not an authenticated grant. Assets' candidate sets are independent (no shared dependencies). The current time is an input (trusted clock). Durable, replay-safe admission, receipts beyond "admitted at the gate", bounded retirement under issuers and crash recovery (the proposal's D5–D7) are not part of this witness.
+
+## 13. Session 7: B witness, switch-local rules with origin deadlines (2026-10-14)
+
+A small **feasibility witness** for the control-network proposal, not the proposed component: one switch with 8 rule slots, a boot epoch and a clock-contract flag. Spec: `src/fabric_spec.rs` (pending human approval, `SPEC_CHANGES.md`).
+
+| Property | Where | Result | Evidence class |
+|---|---|---|---|
+| Forwarding decision: allowed iff a rule is present, the clock contract holds, the rule is for the current boot epoch and `now <=` its origin deadline | `fabric.rs::Switch::forward` | proved | proof on the source (Verus) |
+| B1 installation stores the rule exactly as issued, whatever the installation time; refused installs change nothing | `Switch::install` (`install_post`) | proved | proof |
+| B1 no extension: after an install at any time, forwarding implies `now <=` the deadline as issued | `lemma_b1_no_extension` | proved | proof |
+| B1' a rule arriving after its origin deadline never activates | `lemma_b1_late_rule_refused` | proved | proof |
+| B2 time alone only closes: if a rule forwards at `t2` it forwarded at every earlier `t1`, and `t2 <=` its deadline; no operation other than `install` changes a rule (`reboot`, `clock_lost` keep the slots; `forward` is read-only) | `lemma_b2_time_only_closes`; posts of `reboot`, `clock_lost` | proved | proof |
+| B3 reboot and clock loss close every earlier rule | `lemma_b3_reboot_closes`, `lemma_b3_clock_loss_closes` | proved | proof |
+| B4 bounded withdrawal (arithmetic core): under the issuer contract `deadline <= t_w + delta - sigma_hat` and the clock contract (switch clock lags real time by at most `sigma <= sigma_hat`), nothing forwards after real time `t_w + delta` | `lemma_b4_bounded_withdrawal` | proved | proof; both contracts are assumptions |
+| Whole crate | | **142 verified, 0 errors** (run 2026-10-14T01:54:42Z); first attempt 01:51:43Z also passed | Verus |
+| Teeth: B-1 installation-timed deadline (`now + 100`) | | rejected, "postcondition not satisfied" (01:52:47Z) | expected failure |
+| Teeth: B-2 forwarding ignores the boot epoch | | rejected, "postcondition not satisfied" (01:53:37Z) | expected failure |
+| Scenario (`tests/fabric_witness.rs`): rule issued with deadline 1090 but installed late at 1080 stops at 1090 (an installation-timed 90 s rule would run to 1170); a retry keeps the deadline; a late rule never activates; a fresh grant keeps working while cut off until its own deadline; reboot and clock loss close the path, old-epoch rules are refused | | **5 tests pass** | tests, not proofs |
+
+**Not covered (stated limits).** Rule contents (boot label, deadline) are trusted input; they are not authenticated in this witness (the P7 signed path could carry them later). There is no controller, network or gateway model: "controller loss" means that no further installs arrive. The issuer contract and the clock contract behind B4 are assumptions, as is the switch actually enforcing this decision (the proposal's platform contract [P]). Session binding, epochs of policy, updates (N4) and crash recovery (N8) are not part of this witness.
