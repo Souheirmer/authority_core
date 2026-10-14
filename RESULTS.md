@@ -279,3 +279,14 @@ A small **feasibility witness** for the FDO ownership proposal, not the proposed
 ### Runs for session 8 (A and C)
 
 First attempt 02:08:25Z: 168 verified, 0 errors, but the no-gaming check **failed**: the function name `admit(` matched the escape-hatch pattern `admit(`. It was a false positive (no proof escape was used); the function was renamed `check_admission` rather than weakening the check, and the next run (02:09:28Z) passed. Final run 02:14:09Z: **168 verified, 0 errors**.
+
+## 16. Session 9: wind-farm scenario tests for B and D (2026-10-14)
+
+**Tests, not proofs.** No source or specification changed; the proved B and D witnesses are exercised on an emulated wind-farm scenario. Not GE equipment, not a real switch or twin platform.
+
+| Test file | Scenario | Result |
+|---|---|---|
+| `tests/windfarm_scenario_d.rs` | Eight turbines, T0–T3 on feeder F1 and T4–T7 on F2. T3's controller is replaced (manifest: F1 or F2). Farm-wide curtailment (a site-wide-scoped command to each turbine's current incarnation) is admitted for all eight; an F1 setpoint for T3 is withheld while T0–T2 and T4–T7 setpoints pass; commands to the removed controller are refused; after commissioning evidence (assumed-current truthful) places T3 on F1, its F1 setpoint passes. The curtailment grant expires at its deadline. | **2 tests pass** |
+| `tests/windfarm_scenario_b.rs` | An offshore farm switch carries a vendor engineer's IEC 60870-5-104 service session (1-hour grant) and the operator's SCADA session (24-hour grant). The engineer's rule reaches the switch late (t = 1 700 s); the link to the controller fails at 1 800 s; authority is withdrawn at 2 000 s. The session ends at its origin deadline (3 600 s; an installation-timed rule would run to 5 300 s) while supervision continues. With delta = 1 800 s and sigma_hat = 10 s, nothing forwards from switch time 3 790 s (the B4 contracts are assumed). A reboot closes service access. | **3 tests pass** |
+
+The D scenario uses eight turbines because the approved D-witness spec bounds assets at 8; the proposal's reference testbed (about ten turbines) is not changed by this. Session labels (IEC 104, SCADA) are names in the test, not protocol implementations. All earlier tests still pass.

@@ -14,6 +14,7 @@ A small `no_std`-style Rust library, verified with [Verus](https://github.com/ve
 - `src/fabric_spec.rs`, `src/fabric.rs`, `src/fabric_lemmas.rs`, `tests/fabric_witness.rs`: the B witness, switch-local rules with origin deadlines (see `RESULTS.md` §13)
 - `src/update_spec.rs`, `src/update.rs`, `src/update_lemmas.rs`, `tests/update_witness.rs`: the A witness, firmware-update admission and policy migration (see `RESULTS.md` §14)
 - `src/owner_spec.rs`, `src/owner.rs`, `src/owner_lemmas.rs`, `tests/owner_witness.rs`: the C witness, device-side ownership transfer (see `RESULTS.md` §15)
+- `tests/windfarm_scenario_b.rs`, `tests/windfarm_scenario_d.rs`: the B and D witnesses run on an emulated wind-farm scenario (tests, see `RESULTS.md` §16)
 - `model/`: the TLA+ model and the paper's expected results (ground truth)
 
 ## Wire format
