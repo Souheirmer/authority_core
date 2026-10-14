@@ -35,8 +35,8 @@ pub struct Policy {
 }
 
 /// The signed transcript of an image (abstract fields). ASSUMPTION: `digest`
-/// stands for a collision-resistant digest of the image; computing it and
-/// its collision resistance are not proved here.
+/// is an abstract identifier representing a real collision-resistant digest
+/// of the image; computing it and its collision resistance are not proved here.
 #[derive(Clone, Copy)]
 pub struct Transcript {
     pub class: u32,
@@ -100,8 +100,9 @@ pub open spec fn retire_post(old: Policy, new: Policy, k: int, role: Role, ok: b
     &&& !ok ==> new == old
 }
 
-/// A6 committed floor: after an admitted image is committed, the floor is
-/// max(floor, counter); it never decreases.
+/// A6 floor update: floor := max(floor, counter); it never decreases. This
+/// proves monotonicity of the update only; that it is called for an admitted,
+/// durably installed image is NOT verified in this witness.
 pub open spec fn commit_post(old: Policy, new: Policy, counter: u64) -> bool {
     &&& new.floor == (if counter > old.floor { counter } else { old.floor })
     &&& new.class == old.class && new.epoch == old.epoch && new.mode == old.mode

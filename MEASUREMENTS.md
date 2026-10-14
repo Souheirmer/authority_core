@@ -146,4 +146,4 @@ Same environment as session 5. Verus runs (wall / CPU / peak RSS): first attempt
 | Activity | Human minutes | Source |
 |---|---|---|
 | Instruction to build the A and C witnesses (given with the B approval) | included in session 7 | reported by human |
-| Approval of the A- and C-witness specs | pending | — |
+| Approval of the A- and C-witness specs with clarifications | about 2 | reported by human |

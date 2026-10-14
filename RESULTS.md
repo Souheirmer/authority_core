@@ -245,7 +245,7 @@ A small **feasibility witness** for the control-network proposal, not the propos
 
 ## 14. Session 8: A witness, firmware-update admission and policy migration (2026-10-14)
 
-A small **feasibility witness** for the update-authorisation proposal, not the proposed component and not MCUboot code. Spec: `src/update_spec.rs` (pending human approval).
+A small **feasibility witness** for the update-authorisation proposal, not the proposed component and not MCUboot code. Spec: `src/update_spec.rs` (approved under its abstract-input assumptions).
 
 | Property | Where | Result | Evidence class |
 |---|---|---|---|
@@ -254,15 +254,15 @@ A small **feasibility witness** for the update-authorisation proposal, not the p
 | A3 an image whose required key is retired is rejected | `lemma_a3_retired_key_rejected` | proved | proof |
 | A4 a transcript for another image or device class is rejected | `lemma_a4_binding` | proved | proof |
 | A5 migration only forward (classical, hybrid, post-quantum), never requested by a firmware key; after a migration, a transcript for the old epoch is rejected | `migrate`, `lemma_a5_*` | proved | proof |
-| A6 the committed floor never decreases; images below it are rejected | `commit`, `lemma_a6_floor` | proved | proof |
+| A6 the floor-update function is monotone (never decreases) and images below the floor are rejected; its connection to an admitted, durably installed image is not verified | `commit`, `lemma_a6_floor` | proved | proof |
 | Teeth: A-1 hybrid accepts either signature; A-2 migration allowed backwards | | both rejected, "postcondition not satisfied" (02:10:32Z, 02:11:22Z) | expected failures |
 | Cases (`tests/update_witness.rs`): hybrid image admitted; stripped signature, retired key, other image, other device and pre-migration epoch rejected; firmware key cannot retire or migrate; floor never decreases | | **6 tests pass** | tests, not proofs |
 
-**Not covered (stated limits).** Signature results (`sig_c`, `sig_pq`) are trusted inputs: no cryptography is done, and binding both signatures to the same transcript is assumed of the trusted verifier. The digest stands for a collision-resistant image digest; computing it is not proved. The signer's role is assumed established by trusted, role-separated verification. No bootloader execution paths, flash, swap or recovery (the proposal's adapter, U4 storage and U5) are modelled.
+**Not covered (stated limits).** Signature results (`sig_c`, `sig_pq`) are trusted inputs: no cryptography is done, and binding both signatures to the same transcript is assumed of the trusted verifier. The digest is an abstract identifier representing a real image digest; computing it and its collision resistance are not proved. The floor update is proved monotone, but that it is applied only for an admitted, durably installed image is not verified. The signer's role is assumed established by trusted, role-separated verification. No bootloader execution paths, flash, swap or recovery (the proposal's adapter, U4 storage and U5) are modelled.
 
 ## 15. Session 8: C witness, device-side ownership transfer (2026-10-14)
 
-A small **feasibility witness** for the FDO ownership proposal, not the proposed component and not FDO message handling. Spec: `src/owner_spec.rs` (pending human approval).
+A small **feasibility witness** for the FDO ownership proposal, not the proposed component and not FDO message handling. Spec: `src/owner_spec.rs` (approved under its abstract-input and storage assumptions).
 
 | Property | Where | Result | Evidence class |
 |---|---|---|---|
@@ -274,7 +274,7 @@ A small **feasibility witness** for the FDO ownership proposal, not the proposed
 | Teeth: C-1 begin accepts a chain verified against a retired instance; C-2 commit does not retire the old instance | | both rejected, "postcondition not satisfied" (02:12:13Z, 02:13:02Z) | expected failures |
 | Scenario (`tests/owner_witness.rs`): resale commits; the old owner's replayed voucher for the retired instance is refused after a restart; a cut before commit returns to the prior owner; cross-device and unverified chains refused | | **3 tests pass** | tests, not proofs |
 
-**Not covered (stated limits).** Restart recovers from an **assumed** persisted record (device, instance, owner) that survives intact and is never rolled back: this witness does **not** prove physical storage, atomic writes or anti-rollback, and "one modelled step" is not a proof that the hardware commit is atomic. Chain verification (`chain_ok`) is a trusted input; no voucher parsing or cryptography is done. Conflicting buyers, session binding and the FDO messages themselves are not modelled.
+**Not covered (stated limits).** `instance` is an internal generation, not a native FDO voucher field. Restart models retained intact state and discarded staging, not physical storage recovery: it recovers from an **assumed** persisted record (device, instance, owner) that survives intact and is never rolled back: this witness does **not** prove physical storage, atomic writes or anti-rollback, and "one modelled step" is not a proof that the hardware commit is atomic. Chain verification (`chain_ok`) is a trusted input; no voucher parsing or cryptography is done. Conflicting buyers, session binding and the FDO messages themselves are not modelled.
 
 ### Runs for session 8 (A and C)
 

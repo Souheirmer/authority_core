@@ -62,3 +62,4 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-14T02:12:13Z,fail,1,167,crate,planted bug C-1: begin accepts a chain verified against a retired instance (expected to fail);,47.7,69.80,593208
 2026-10-14T02:13:02Z,fail,1,167,crate,planted bug C-2: commit does not retire the old instance (expected to fail);,47.5,69.64,593116
 2026-10-14T02:14:09Z,pass,0,168,crate,A and C witnesses final (after four planted-bug runs; code restored);,52.53,75.16,600828
+2026-10-14T02:35:09Z,pass,0,168,crate,A- and C-witness v1 approved: comment-only clarifications;,53.85,76.52,601200

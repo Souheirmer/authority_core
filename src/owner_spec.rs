@@ -7,8 +7,8 @@ use vstd::prelude::*;
 
 verus! {
 
-/// Device ownership state. `instance` is the current onboarding instance
-/// (generation); every lower instance is retired. `owner` is the active
+/// Device ownership state. `instance` is the device's internal generation
+/// (not a native FDO voucher field); every lower generation is retired. `owner` is the active
 /// owner credential (abstract id). `staged` / `staged_owner` / `staged_from`
 /// describe a transfer in progress, never authoritative before commit.
 pub struct OwnerState {
@@ -50,7 +50,8 @@ pub open spec fn commit_post(old: OwnerState, new: OwnerState, ok: bool) -> bool
     &&& !ok ==> new == old
 }
 
-/// C5 restart: recovery from the persisted record. ASSUMPTION: the persisted
+/// C5 restart: models retained intact state and discarded staging, not
+/// physical storage recovery. ASSUMPTION: the persisted
 /// record (device, instance, owner) survives the power cut intact and is never
 /// rolled back; this witness does NOT prove physical storage, atomic writes or
 /// anti-rollback. A transfer in progress is dropped.
