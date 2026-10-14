@@ -154,4 +154,4 @@ Tests only (no Verus run needed: no verified source changed). Same container env
 
 | Activity | Human minutes | Source |
 |---|---|---|
-| Instruction to add wind-farm scenario tests for B and D | to be reported by the human | — |
+| Instruction to add wind-farm scenario tests for B and D | about 1 | reported by human |
