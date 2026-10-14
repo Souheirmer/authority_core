@@ -1,5 +1,5 @@
 //! D witness: the worked trace from the proposal, as a test (not a proof).
-//! Asset 0 is replaced; until signed evidence says which feeder it is on,
+//! Asset 0 is replaced; until assumed-current truthful evidence says which feeder it is on,
 //! it may be on F1 or F2. The proved rule is admit_spec (src/gate_spec.rs).
 use authority_core::gate::Gate;
 use authority_core::gate_spec::{Command, Decision, Scope};
@@ -17,7 +17,7 @@ fn admitted(g: &Gate, c: Command, now: u64) -> bool {
     matches!(g.decide(&c, now), Decision::Admitted)
 }
 
-/// Asset 0 known on F1, asset 1 known on F2 (signed evidence).
+/// Asset 0 known on F1, asset 1 known on F2 (assumed-current truthful evidence).
 fn site() -> Gate {
     let mut g = Gate::new();
     g.prune(0, F1);
@@ -43,7 +43,7 @@ fn worked_trace_replacement_with_ambiguous_feeder() {
     // Asset 1 does not depend on asset 0's feeder: unaffected.
     assert!(admitted(&g, cmd(1, 1, Scope::Feeder(F2)), NOW));
 
-    // Signed evidence: the replacement is on F1. Now the F1 setpoint passes.
+    // Assumed-current truthful evidence: the replacement is on F1. Now the F1 setpoint passes.
     g.prune(0, F1);
     assert!(admitted(&g, cmd(0, 2, Scope::Feeder(F1)), NOW));
     assert!(!admitted(&g, cmd(0, 2, Scope::Feeder(F2)), NOW));

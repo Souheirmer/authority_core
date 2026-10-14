@@ -207,18 +207,18 @@ Baseline: tag `v0-pilot` (commit `e5125e0`) is the pilot as cited in the ARIA pr
 
 ## 12. Session 6: D witness, command gate under configuration uncertainty (2026-10-14)
 
-A small **feasibility witness** for the command-gate proposal, not the proposed component. Up to 8 assets and 4 feeders; per asset the gate keeps the current incarnation and the set of feeders still possible. Spec: `src/gate_spec.rs` (pending human approval, `SPEC_CHANGES.md`).
+A small **feasibility witness** for the command-gate proposal, not the proposed component. Up to 8 assets and 4 feeders; per asset the gate keeps the current incarnation and the set of feeders still possible. Spec: `src/gate_spec.rs` (approved as a bounded feasibility witness, `SPEC_CHANGES.md`).
 
 | Property | Where | Result | Evidence class |
 |---|---|---|---|
 | G1 decision: `Admitted` iff in range, grant unexpired at `now`, exact incarnation, non-empty candidate set, and permitted in **every** candidate | `gate.rs::Gate::decide` | proved | proof on the source (Verus) |
-| G2 soundness under uncertainty: if the actual feeder is a candidate, an admitted command is permitted in the actual configuration | `gate_lemmas.rs::lemma_g2_actual_config` | proved | proof |
-| G3 usefulness: a site-wide command for the current incarnation with an unexpired grant is admitted whatever the uncertainty (a deny-all gate fails this); a feeder-specific command is withheld while another feeder is possible | `lemma_g3_sitewide_admitted`, `lemma_g3_ambiguous_feeder_withheld` | proved | proof |
-| G4 containment: replacement never drops a possible feeder and adds every manifest-allowed one; truthful evidence keeps the actual feeder | `gate.rs::replace`, `prune`; `lemma_g4_*` | proved | proof |
+| G2 soundness under uncertainty: if the actual feeder is a candidate, an admitted command is permitted in the actual configuration, under the simplified feeder predicate (not physical safety, not execution) | `gate_lemmas.rs::lemma_g2_actual_config` | proved | proof |
+| G3 usefulness, under exactly its lemma's preconditions (asset in range, `now <= deadline`, current incarnation, non-empty candidate set, site-wide scope): admitted whatever the uncertainty (a deny-all gate fails this); a feeder-specific command is withheld while another feeder is possible | `lemma_g3_sitewide_admitted`, `lemma_g3_ambiguous_feeder_withheld` | proved | proof |
+| G4 containment: replacement never drops a possible feeder and adds every manifest-allowed one; assumed-current truthful evidence keeps the actual feeder | `gate.rs::replace`, `prune`; `lemma_g4_*` | proved | proof |
 | G5 retired incarnation: after replacement, a command bound to the old incarnation is withheld | `lemma_g5_retired_incarnation` | proved | proof |
 | Whole crate | | **128 verified, 0 errors** (run 2026-10-14T01:40:20Z); first attempt 01:37:22Z also passed | Verus |
 | Teeth: D-1 admit if permitted in SOME candidate | | rejected, "postcondition not satisfied" (01:38:25Z) | expected failure |
 | Teeth: D-2 replacement narrows the set to the manifest | | rejected, "assertion failed" (01:39:16Z) | expected failure |
-| Worked trace (`tests/gate_witness.rs`): after replacement with F1 or F2 possible, site-wide curtailment admitted; F1 and F2 setpoints withheld; old incarnation withheld; another asset unaffected; after evidence for F1, the F1 setpoint admitted; expiry; out-of-range asset; initial uncertainty | | **4 tests pass** | tests, not proofs |
+| Worked trace (`tests/gate_witness.rs`): after replacement with F1 or F2 possible, site-wide curtailment admitted; F1 and F2 setpoints withheld; old incarnation withheld; another asset unaffected; after assumed-current truthful evidence for F1, the F1 setpoint admitted; expiry; out-of-range asset; initial uncertainty | | **4 tests pass** | tests, not proofs |
 
-**Not covered (stated limits).** The truth of feeder evidence is assumed (trusted deployment authority), and evidence and replacement inputs are not yet signed (the P7 signed path could carry them later). Assets' candidate sets are independent (no shared dependencies). The current time is an input (trusted clock). Durable, replay-safe admission, receipts beyond "admitted at the gate", bounded retirement under issuers and crash recovery (the proposal's D5–D7) are not part of this witness.
+**Not covered (stated limits).** Evidence supplied to pruning is assumed currently true for the current incarnation; its signatures and chronology are not checked, and replacement inputs are not authenticated (the P7 signed path could carry them later). Command authority and deadline metadata are trusted input, not an authenticated grant. Assets' candidate sets are independent (no shared dependencies). The current time is an input (trusted clock). Durable, replay-safe admission, receipts beyond "admitted at the gate", bounded retirement under issuers and crash recovery (the proposal's D5–D7) are not part of this witness.

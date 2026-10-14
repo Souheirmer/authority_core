@@ -18,7 +18,7 @@ impl View for Gate {
 
 impl Gate {
     /// Every asset at incarnation 1 with every feeder possible (maximal
-    /// uncertainty until signed evidence prunes it).
+    /// uncertainty until assumed-current truthful evidence prunes it).
     pub fn new() -> (g: Self)
         ensures
             g@.len() == ASSETS,
@@ -94,7 +94,8 @@ impl Gate {
         }
     }
 
-    /// Signed evidence: asset a is on feeder f.
+    /// Assumed-current truthful evidence: asset a (current incarnation) is on
+    /// feeder f. Not authenticated here: signatures and chronology are not checked.
     pub fn prune(&mut self, a: u32, f: u8)
         requires
             (a as int) < (ASSETS as int),

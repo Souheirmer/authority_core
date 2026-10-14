@@ -28,7 +28,8 @@ pub enum Scope {
 }
 
 /// A command bound to an asset, an exact incarnation, a scope, and the
-/// origin deadline of its grant.
+/// origin deadline of its grant. ASSUMPTION: this authority/deadline metadata
+/// is trusted input; it is not an authenticated grant in this witness.
 #[derive(Clone, Copy)]
 pub struct Command {
     pub asset: u32,
@@ -79,8 +80,10 @@ pub open spec fn replace_post(old: Seq<AssetState>, new: Seq<AssetState>, a: int
     &&& forall|x: int| 0 <= x < FEEDERS as int ==> #[trigger] new[a].cand@[x] == (old[a].cand@[x] || allowed[x])
 }
 
-/// Signed evidence that asset a is on feeder f prunes its candidate set to {f}.
-/// Whether the evidence is true is an assumption (trusted deployment authority).
+/// Assumed-current truthful evidence that asset a (current incarnation) is on
+/// feeder f prunes its candidate set to {f}. ASSUMPTION: the evidence is true
+/// now for the current incarnation; signatures and chronology are not checked
+/// in this witness.
 pub open spec fn prune_post(old: Seq<AssetState>, new: Seq<AssetState>, a: int, f: int) -> bool {
     &&& new.len() == old.len()
     &&& forall|i: int| 0 <= i < old.len() && i != a ==> #[trigger] new[i] == old[i]

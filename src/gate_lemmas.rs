@@ -5,7 +5,9 @@ use crate::gate_spec::*;
 verus! {
 
 /// G2 soundness under uncertainty: if the actual feeder is among the
-/// candidates, an admitted command is permitted in the actual configuration.
+/// candidates, an admitted command is permitted in the actual configuration
+/// under the simplified feeder predicate `permitted_in`. This is not physical
+/// safety and says nothing about execution.
 pub proof fn lemma_g2_actual_config(g: Seq<AssetState>, c: Command, now: u64, actual: int)
     requires
         admit_spec(g, c, now),
@@ -16,9 +18,10 @@ pub proof fn lemma_g2_actual_config(g: Seq<AssetState>, c: Command, now: u64, ac
 {
 }
 
-/// G3 usefulness (non-vacuity): a site-wide command bound to the current
-/// incarnation, with an unexpired grant, is admitted however uncertain the
-/// feeder is, as long as some feeder is possible. A deny-all gate fails this.
+/// G3 usefulness (non-vacuity): under exactly the lemma's preconditions (asset
+/// in range, now <= deadline, current incarnation, non-empty candidate set,
+/// site-wide scope), the command is admitted however uncertain the feeder is.
+/// A deny-all gate fails this.
 pub proof fn lemma_g3_sitewide_admitted(g: Seq<AssetState>, c: Command, now: u64)
     requires
         (c.asset as int) < (ASSETS as int),
@@ -45,7 +48,7 @@ pub proof fn lemma_g3_ambiguous_feeder_withheld(g: Seq<AssetState>, c: Command, 
 }
 
 /// G4 containment: replacement never drops a possible feeder, and adds every
-/// feeder the manifest allows; truthful evidence keeps the actual feeder.
+/// feeder the manifest allows; assumed-current truthful evidence keeps the actual feeder.
 pub proof fn lemma_g4_replace_contains(old: Seq<AssetState>, new: Seq<AssetState>, a: int, allowed: Seq<bool>, x: int)
     requires
         replace_post(old, new, a, allowed),

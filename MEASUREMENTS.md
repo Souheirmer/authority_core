@@ -128,5 +128,4 @@ Same environment as session 5. Verus runs (wall / CPU / peak RSS): first attempt
 
 | Activity | Human minutes | Source |
 |---|---|---|
-| Instruction to build the D witness | to be reported by the human | — |
-| Approval of the D-witness spec | pending | — |
+| Instruction to build the D witness, and approval of the D-witness spec with clarifications | about 2 | reported by human (whole session) |
