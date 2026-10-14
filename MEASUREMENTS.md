@@ -138,3 +138,12 @@ Same environment as session 5. Verus runs (wall / CPU / peak RSS): first attempt
 |---|---|---|
 | Instruction to build the B witness (given with the D approval) | included in session 6 | reported by human |
 | Approval of the B-witness spec with clarifications, and instructions for A, C and the proposals | about 3 | reported by human |
+
+## Session 8 (2026-10-14): A and C witnesses
+
+Same environment as session 5. Verus runs (wall / CPU / peak RSS): first attempt 53.8 s / 76.8 s / 586 MiB (proofs passed, no-gaming check failed on a function name, see `RESULTS.md` §15); rename 51.9 s / 74.3 s; four planted bugs about 48 s each (all rejected); final 52.5 s / 75.2 s / 587 MiB. Specs, code and proofs verified on the first attempt; one failed run caused by the naming false positive.
+
+| Activity | Human minutes | Source |
+|---|---|---|
+| Instruction to build the A and C witnesses (given with the B approval) | included in session 7 | reported by human |
+| Approval of the A- and C-witness specs | pending | — |

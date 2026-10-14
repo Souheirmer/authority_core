@@ -242,3 +242,40 @@ A small **feasibility witness** for the control-network proposal, not the propos
 | Scenario (`tests/fabric_witness.rs`): rule issued with deadline 1090 but installed late at 1080 stops at 1090 (an installation-timed 90 s rule would run to 1170); a retry keeps the deadline; a late rule never activates; a fresh grant keeps working while cut off until its own deadline; reboot and clock loss close the path, old-epoch rules are refused | | **5 tests pass** | tests, not proofs |
 
 **Not covered (stated limits).** `clock_ok` represents an assumed clock contract; the witness does not verify that any clock meets it. Reboot closure refers to the modelled operation, not a verified hardware restart. Rule contents (boot label, deadline) are trusted input; they are not authenticated in this witness (the P7 signed path could carry them later). There is no controller, network or gateway model: "controller loss" means that no further installs arrive. The issuer contract and the clock contract behind B4 are assumptions, as is the switch actually enforcing this decision (the proposal's platform contract [P]). Session binding, epochs of policy, updates (N4) and crash recovery (N8) are not part of this witness.
+
+## 14. Session 8: A witness, firmware-update admission and policy migration (2026-10-14)
+
+A small **feasibility witness** for the update-authorisation proposal, not the proposed component and not MCUboot code. Spec: `src/update_spec.rs` (pending human approval).
+
+| Property | Where | Result | Evidence class |
+|---|---|---|---|
+| A1 admission: same device class, transcript digest equal to the measured image digest, current policy epoch, counter at or above the floor, and every signature the mode requires valid under a non-retired key | `update.rs::UpdatePolicy::check_admission` | proved | proof on the source (Verus) |
+| A2 under the hybrid policy, an image missing either signature is rejected | `lemma_a2_stripped_rejected` | proved | proof |
+| A3 an image whose required key is retired is rejected | `lemma_a3_retired_key_rejected` | proved | proof |
+| A4 a transcript for another image or device class is rejected | `lemma_a4_binding` | proved | proof |
+| A5 migration only forward (classical, hybrid, post-quantum), never requested by a firmware key; after a migration, a transcript for the old epoch is rejected | `migrate`, `lemma_a5_*` | proved | proof |
+| A6 the committed floor never decreases; images below it are rejected | `commit`, `lemma_a6_floor` | proved | proof |
+| Teeth: A-1 hybrid accepts either signature; A-2 migration allowed backwards | | both rejected, "postcondition not satisfied" (02:10:32Z, 02:11:22Z) | expected failures |
+| Cases (`tests/update_witness.rs`): hybrid image admitted; stripped signature, retired key, other image, other device and pre-migration epoch rejected; firmware key cannot retire or migrate; floor never decreases | | **6 tests pass** | tests, not proofs |
+
+**Not covered (stated limits).** Signature results (`sig_c`, `sig_pq`) are trusted inputs: no cryptography is done, and binding both signatures to the same transcript is assumed of the trusted verifier. The digest stands for a collision-resistant image digest; computing it is not proved. The signer's role is assumed established by trusted, role-separated verification. No bootloader execution paths, flash, swap or recovery (the proposal's adapter, U4 storage and U5) are modelled.
+
+## 15. Session 8: C witness, device-side ownership transfer (2026-10-14)
+
+A small **feasibility witness** for the FDO ownership proposal, not the proposed component and not FDO message handling. Spec: `src/owner_spec.rs` (pending human approval).
+
+| Property | Where | Result | Evidence class |
+|---|---|---|---|
+| C1 a transfer is staged only for this device, with a verified chain, against the current instance; otherwise nothing changes | `owner.rs::Device::begin`, `lemma_c1_refusals` | proved | proof on the source (Verus) |
+| C2 staged credentials are not authoritative: staging never changes the active owner | `lemma_c2_staged_not_authoritative` | proved | proof |
+| C3 commit changes owner and instance together in one modelled step; the instance strictly increases | `Device::commit`, `lemma_c3_instance_increases` | proved | proof |
+| C4 after a commit, a transfer bound to the retired instance is refused, also after a modelled restart | `lemma_c4_retired_instance_refused` | proved | proof |
+| C5 power cut before commit: the modelled restart returns to the prior owner and instance with nothing staged | `Device::restart`, `lemma_c5_cut_before_commit` | proved, under the persisted-record assumption | proof of the model, not of storage |
+| Teeth: C-1 begin accepts a chain verified against a retired instance; C-2 commit does not retire the old instance | | both rejected, "postcondition not satisfied" (02:12:13Z, 02:13:02Z) | expected failures |
+| Scenario (`tests/owner_witness.rs`): resale commits; the old owner's replayed voucher for the retired instance is refused after a restart; a cut before commit returns to the prior owner; cross-device and unverified chains refused | | **3 tests pass** | tests, not proofs |
+
+**Not covered (stated limits).** Restart recovers from an **assumed** persisted record (device, instance, owner) that survives intact and is never rolled back: this witness does **not** prove physical storage, atomic writes or anti-rollback, and "one modelled step" is not a proof that the hardware commit is atomic. Chain verification (`chain_ok`) is a trusted input; no voucher parsing or cryptography is done. Conflicting buyers, session binding and the FDO messages themselves are not modelled.
+
+### Runs for session 8 (A and C)
+
+First attempt 02:08:25Z: 168 verified, 0 errors, but the no-gaming check **failed**: the function name `admit(` matched the escape-hatch pattern `admit(`. It was a false positive (no proof escape was used); the function was renamed `check_admission` rather than weakening the check, and the next run (02:09:28Z) passed. Final run 02:14:09Z: **168 verified, 0 errors**.

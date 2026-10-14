@@ -12,6 +12,8 @@ A small `no_std`-style Rust library, verified with [Verus](https://github.com/ve
 - `trace_validation/`: conformance testing of the code against TLC traces of the model (see `trace_validation/REPORT.md`)
 - `src/gate_spec.rs`, `src/gate.rs`, `src/gate_lemmas.rs`, `tests/gate_witness.rs`: the D witness, a small command gate under configuration uncertainty (see `RESULTS.md` §12)
 - `src/fabric_spec.rs`, `src/fabric.rs`, `src/fabric_lemmas.rs`, `tests/fabric_witness.rs`: the B witness, switch-local rules with origin deadlines (see `RESULTS.md` §13)
+- `src/update_spec.rs`, `src/update.rs`, `src/update_lemmas.rs`, `tests/update_witness.rs`: the A witness, firmware-update admission and policy migration (see `RESULTS.md` §14)
+- `src/owner_spec.rs`, `src/owner.rs`, `src/owner_lemmas.rs`, `tests/owner_witness.rs`: the C witness, device-side ownership transfer (see `RESULTS.md` §15)
 - `model/`: the TLA+ model and the paper's expected results (ground truth)
 
 ## Wire format
