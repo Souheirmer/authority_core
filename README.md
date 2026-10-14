@@ -14,7 +14,7 @@ A small `no_std`-style Rust library, verified with [Verus](https://github.com/ve
 
 ## Wire format
 
-A notification is exactly 21 bytes: status (0 = Revoked, 1 = Enrolled, 2 = Suspended; anything else is invalid), device id (big-endian u32, < N = 64), ver (big-endian u64), orig (big-endian u64). Since spec v4 the cache also accepts verified poll answers (`Cache::poll_update`, mirroring the model's `PdpPoll`).
+A notification is exactly 21 bytes, signed with Ed25519 by the authority key over the domain prefix `authority_core/notification/v1` followed by the 21 bytes (64-byte signature, strict verification; spec v5): status (0 = Revoked, 1 = Enrolled, 2 = Suspended; anything else is invalid), device id (big-endian u32, < N = 64), ver (big-endian u64), orig (big-endian u64). Since spec v4 the cache also accepts verified poll answers (`Cache::poll_update`, mirroring the model's `PdpPoll`).
 
 ## Assumptions (from the TLA+/TLAPS model)
 
@@ -23,7 +23,8 @@ The rule is implemented exactly as stated; these are the assumptions under which
 - **Bounded clock error.** Registry origin stamps (`orig`) are at most `sigma` ahead of the decision point's clock, as in the TLA+ model. P5 additionally requires the configured bound to cover the real one: `sigma <= sigma_hat`. P6 (a test) shows this margin is necessary.
 - **Configuration.** The paper's precondition `sigma_hat <= delta` is not assumed. It is a conjunct of `a8` instead, so a misconfigured decision point (`sigma_hat > delta`) denies every request.
 - **Versions start at 1.** An empty slot holds `(Unknown, ver = 0, orig = 0)`, and `apply` overwrites only on a strictly greater version, so the registry's first record for a device must have `ver >= 1`. A `ver = 0` notification is ignored.
-- **Signatures.** `signature_ok(bytes, sig)` is a trusted, unverified function (`#[verifier::external_body]`). It is the only trusted code in the crate.
+- **Signatures (spec v5).** `signature_ok(pk, bytes, sig)` is trusted (`#[verifier::external_body]`, the only one in the crate): its contract is that it returns exactly `sig_valid(pk, bytes, sig)`. Its body calls `src/sig_impl.rs`, a thin unverified wrapper over the `ed25519-dalek` library (pinned 2.2.0), which is also trusted. Ed25519's cryptographic security is an assumption. Under Verus a stub replaces the wrapper, so the proofs depend only on the contract.
+- **Authority key (spec v5).** `pk` is the configured authority key, supplied by trusted configuration or caller code; an incoming notification cannot select it. P7 holds for the signed `Cache::handle` path only; `poll_update` (spec v4) is a separate, unsigned interface that trusts the registry's answer.
 
 ## Usage
 

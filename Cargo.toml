@@ -8,8 +8,10 @@ path = "src/lib.rs"
 
 [dependencies]
 vstd = { version = "=0.0.0-2026-10-04-0306", default-features = false }
+ed25519-dalek = { version = "=2.2.0", default-features = false }
 
 [dev-dependencies]
+ed25519-dalek = { version = "=2.2.0", default-features = false }
 authority_core_mutants = { path = "mutants" }
 
 [workspace]

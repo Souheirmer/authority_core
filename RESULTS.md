@@ -25,7 +25,7 @@ Sanity check that the contracts have teeth: two bugs were planted on purpose (`<
 
 ## 3. Trusted assumptions (not proved)
 
-1. `signature_ok(bytes, sig)` in `src/lib.rs`: `#[verifier::external_body]`, no specification. Nothing proved depends on its result. The placeholder returns `false`. It is used only by `Cache::handle`.
+1. `signature_ok(bytes, sig)` in `src/lib.rs`: `#[verifier::external_body]`, no specification. Nothing proved depends on its result. The placeholder returns `false`. It is used only by `Cache::handle`. (Superseded by spec v5, §11: real Ed25519 verification with a stated contract.)
 2. The specification `src/spec.rs` faithfully captures rule A8 and the paper's properties. This was reviewed and approved by the human; it cannot be verified.
 3. Model-level facts used as hypotheses, not established by this code: the invariant `since_rev <= (now - orig) + sigma` (origin stamp precedes revocation, up to clock error), `sigma <= sigma_hat`, and registry versions starting at 1. These come from the TLA+/TLAPS model; see README "Assumptions".
 4. Tool soundness: Verus, Z3, rustc 1.98.1, and `vstd` (including its specifications of slices and arrays).
@@ -184,3 +184,23 @@ See **`RESULTS_RULES.md`**. All 80 cells of the paper's 8×10 table are machine-
 - **Executable rules:** A1–A8, proved equal to their spec functions. A8 is the original verified `decide::allow`.
 - **Size:** the crate now has 112 verified items, 0 errors.
 - **Runs:** 20 Verus runs for Extension A (12 passed, 8 failed: 5 development, 2 deliberate sanity, 1 expected mutant).
+
+## 11. Session 5: signed input path (spec v5, 2026-10-14)
+
+Baseline: tag `v0-pilot` (commit `e5125e0`) is the pilot as cited in the ARIA proposals. It re-verified unchanged in this session's environment (112 verified, 0 errors, run 2026-10-14T00:48:36Z).
+
+**What changed.** The placeholder `signature_ok` (which rejected everything) is replaced by real Ed25519 verification under a pinned authority key, with domain separation. The proved contract of `Cache::handle` (P7, `handle_post`) now states: a notification is accepted only if it decodes **and** `sig_valid(pk, bytes, sig)`; otherwise the cache is unchanged.
+
+| Item | Result | Evidence class |
+|---|---|---|
+| P7 `handle_post` with `sig_valid` | **112 verified, 0 errors** (run 2026-10-14T00:50:38Z; re-run 00:52:29Z) | proof on the source (Verus) |
+| Teeth check: `handle` applying without the signature check | rejected, "postcondition not satisfied" (run 00:51:36Z, 111 verified, 1 error) | proof failure, as expected |
+| No-gaming check | OK, exactly one trusted `external_body` (`signature_ok`) | script |
+| `tests/signed_input.rs`, real Ed25519 signatures | **8 tests pass**: correct signature accepted; each of the 21 bytes altered rejected; altered signature rejected; wrong key rejected; signature without the domain prefix rejected; truncated key or signature rejected; an authentic but older (replayed) notification cannot restore revoked authority; the lease expires at `now - orig > delta - sigma_hat` | tests, not proofs |
+| Earlier tests (P6, mutant trace, 50 counterexamples) | still pass | tests |
+
+**Scope (as approved).** P7 is a guarantee of the signed `Cache::handle` path, not of every cache-update interface: `poll_update` (spec v4) is unsigned and trusts the registry's answer. It assumes `pk` is the configured authority key supplied by trusted configuration or caller code, which an incoming notification cannot select.
+
+**What is trusted.** `signature_ok`'s contract; the wrapper `src/sig_impl.rs`; the `ed25519-dalek` 2.2.0 library; Ed25519's security; the pinned key being the authority's. Replay and expiry are **not** new proofs: replay is a no-op by P2 (strictly increasing versions) and expiry is A8 (P3); the tests show that this holds on the signed path. The current time is an input to `allow_device`; a trusted clock with error at most `sigma <= sigma_hat` remains an assumption (README).
+
+**Environment.** Same pinned Verus `0.2026.10.04.426d8b0` and Rust `1.98.1`, run in an `ubuntu:24.04` linux/amd64 container (emulated) on an Apple M1 Pro; wall times in `logs/verus_runs.csv` (about 45–51 s per run) reflect the emulation and are not comparable with sessions 1–4.
