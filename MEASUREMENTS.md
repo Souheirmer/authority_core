@@ -147,3 +147,11 @@ Same environment as session 5. Verus runs (wall / CPU / peak RSS): first attempt
 |---|---|---|
 | Instruction to build the A and C witnesses (given with the B approval) | included in session 7 | reported by human |
 | Approval of the A- and C-witness specs with clarifications | about 2 | reported by human |
+
+## Session 9 (2026-10-14): wind-farm scenario tests
+
+Tests only (no Verus run needed: no verified source changed). Same container environment as session 5.
+
+| Activity | Human minutes | Source |
+|---|---|---|
+| Instruction to add wind-farm scenario tests for B and D | to be reported by the human | — |
