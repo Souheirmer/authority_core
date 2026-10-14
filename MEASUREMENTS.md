@@ -120,5 +120,12 @@ Environment: `ubuntu:24.04` linux/amd64 container under emulation on the human's
 
 | Activity | Human minutes | Source |
 |---|---|---|
-| Instruction to tag the pilot and add the signature path | to be reported by the human | — |
-| Approval of spec v5 (with the `pk` assumption and P7 scope) | to be reported by the human | approved 2026-10-14 |
+| Instruction to tag the pilot and add the signature path, and approval of spec v5 (with the `pk` assumption and P7 scope) | about 2 | reported by human (whole session) |
+
+## Session 6 (2026-10-14): D witness
+
+Same environment as session 5. Verus runs (wall / CPU / peak RSS): first attempt 52.7 s / 70.8 s / 572 MiB (passed); planted bug D-1 49.1 s / 67.9 s; planted bug D-2 47.4 s / 66.1 s; final 49.6 s / 68.0 s / 573 MiB. The spec, code and proofs verified on the first attempt; no failed attempts other than the two planted bugs.
+
+| Activity | Human minutes | Source |
+|---|---|---|
+| Instruction to build the D witness, and approval of the D-witness spec with clarifications | about 2 | reported by human (whole session) |

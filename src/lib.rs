@@ -14,6 +14,9 @@ pub mod rules_cex;
 pub mod rules_table;
 pub mod rules_exec;
 pub mod sig_impl;
+pub mod gate_spec;
+pub mod gate;
+pub mod gate_lemmas;
 
 use vstd::prelude::*;
 

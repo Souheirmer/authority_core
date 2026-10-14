@@ -45,3 +45,8 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-14T00:51:36Z,fail,1,111,crate,planted bug: handle applies without checking the signature (expected to fail);,44.94,62.55,576900
 2026-10-14T00:52:29Z,pass,0,112,crate,re-run after removing the planted bug;,47.89,64.70,582356
 2026-10-14T01:34:12Z,pass,0,112,crate,spec v5 approved: comment-only additions (pk assumption; P7 scope);,48.12,65.45,582240
+2026-10-14T01:37:22Z,pass,0,128,crate,D witness: gate spec; decide/replace/prune; lemmas G2-G5 (first attempt);,52.68,70.81,585984
+2026-10-14T01:38:25Z,fail,1,127,crate,planted bug D-1: admit if permitted in SOME candidate (expected to fail);,49.12,67.92,584116
+2026-10-14T01:39:16Z,fail,1,127,crate,planted bug D-2: replacement narrows the candidate set to the manifest (expected to fail);,47.43,66.10,580592
+2026-10-14T01:40:20Z,pass,0,128,crate,D witness final (after the two planted-bug runs; code restored);,49.59,67.95,586552
+2026-10-14T01:49:46Z,pass,0,128,crate,D-witness v1 approved: comment-only clarifications;,51.37,70.09,586620
