@@ -25,8 +25,10 @@ pub struct Slot {
     pub rule: Rule,
 }
 
-/// Switch state: rule slots, current boot epoch, and whether the clock
-/// contract currently holds.
+/// Switch state: rule slots, current boot epoch, and `clock_ok`. ASSUMPTION:
+/// `clock_ok` represents an assumed clock contract (switch clock within the
+/// stated error of the issuer's); this witness does not verify that any clock
+/// meets it, only that the switch closes when the flag is cleared.
 pub struct SwitchState {
     pub slots: Seq<Slot>,
     pub boot: u64,
@@ -35,7 +37,8 @@ pub struct SwitchState {
 
 /// Forwarding decision for slot s at local time now: a rule is present, the
 /// clock contract holds, the rule is labelled for the current boot epoch, and
-/// its origin deadline has not passed.
+/// its origin deadline has not passed: forwarding is permitted AT the
+/// deadline (now == deadline) and denied afterwards.
 pub open spec fn forward_spec(st: SwitchState, s: int, now: u64) -> bool {
     &&& 0 <= s < SLOTS as int
     &&& st.clock_ok
@@ -58,7 +61,9 @@ pub open spec fn install_post(old: SwitchState, new: SwitchState, s: int, r: Rul
     &&& !ok ==> new.slots[s] == old.slots[s]
 }
 
-/// B3 reboot: new boot epoch; rules labelled for an earlier epoch no longer forward.
+/// B3 reboot: new boot epoch; rules labelled for an earlier epoch no longer
+/// forward. This is the modelled operation only, not a verified hardware
+/// restart mechanism.
 pub open spec fn reboot_post(old: SwitchState, new: SwitchState) -> bool {
     &&& new.boot == old.boot + 1
     &&& new.clock_ok == old.clock_ok

@@ -54,3 +54,4 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-14T01:52:47Z,fail,1,141,crate,planted bug B-1: installation-timed deadline (now + 100) instead of the origin deadline (expected to fail);,48.59,68.12,586600
 2026-10-14T01:53:37Z,fail,1,141,crate,planted bug B-2: forwarding ignores the boot epoch (expected to fail);,49.37,69.20,584664
 2026-10-14T01:54:42Z,pass,0,142,crate,B witness final (after the two planted-bug runs; code restored);,52.03,71.41,591284
+2026-10-14T02:06:14Z,pass,0,142,crate,B-witness v1 approved: comment-only clarifications;,53.23,72.69,591672
