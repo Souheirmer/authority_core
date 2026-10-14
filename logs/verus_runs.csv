@@ -55,3 +55,11 @@ timestamp,result,errors,verified,target,note,wall_s,cpu_s,max_rss_kb
 2026-10-14T01:53:37Z,fail,1,141,crate,planted bug B-2: forwarding ignores the boot epoch (expected to fail);,49.37,69.20,584664
 2026-10-14T01:54:42Z,pass,0,142,crate,B witness final (after the two planted-bug runs; code restored);,52.03,71.41,591284
 2026-10-14T02:06:14Z,pass,0,142,crate,B-witness v1 approved: comment-only clarifications;,53.23,72.69,591672
+2026-10-14T02:08:25Z,fail,0,168,crate,GAMING-CHECK-FAILED; A and C witnesses (first attempt);,53.76,76.84,600552
+2026-10-14T02:09:28Z,pass,0,168,crate,A and C witnesses: rename UpdatePolicy::admit to check_admission (name tripped the no-gaming pattern admit();,51.91,74.34,600852
+2026-10-14T02:10:32Z,fail,1,167,crate,planted bug A-1: hybrid accepts either signature (expected to fail);,48.2,70.87,593544
+2026-10-14T02:11:22Z,fail,1,167,crate,planted bug A-2: migration allowed backwards (expected to fail);,48.45,70.99,594316
+2026-10-14T02:12:13Z,fail,1,167,crate,planted bug C-1: begin accepts a chain verified against a retired instance (expected to fail);,47.7,69.80,593208
+2026-10-14T02:13:02Z,fail,1,167,crate,planted bug C-2: commit does not retire the old instance (expected to fail);,47.5,69.64,593116
+2026-10-14T02:14:09Z,pass,0,168,crate,A and C witnesses final (after four planted-bug runs; code restored);,52.53,75.16,600828
+2026-10-14T02:35:09Z,pass,0,168,crate,A- and C-witness v1 approved: comment-only clarifications;,53.85,76.52,601200

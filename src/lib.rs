@@ -20,6 +20,12 @@ pub mod gate_lemmas;
 pub mod fabric_spec;
 pub mod fabric;
 pub mod fabric_lemmas;
+pub mod update_spec;
+pub mod update;
+pub mod update_lemmas;
+pub mod owner_spec;
+pub mod owner;
+pub mod owner_lemmas;
 
 use vstd::prelude::*;
 
