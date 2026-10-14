@@ -17,6 +17,9 @@ pub mod sig_impl;
 pub mod gate_spec;
 pub mod gate;
 pub mod gate_lemmas;
+pub mod fabric_spec;
+pub mod fabric;
+pub mod fabric_lemmas;
 
 use vstd::prelude::*;
 

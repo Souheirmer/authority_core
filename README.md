@@ -11,6 +11,7 @@ A small `no_std`-style Rust library, verified with [Verus](https://github.com/ve
 - `src/rules_proofs.rs`, `src/rules_cex.rs`, `src/rules_table.rs`, `src/rules_exec.rs`: the paper's 8×10 table, machine-checked (see `RESULTS_RULES.md`)
 - `trace_validation/`: conformance testing of the code against TLC traces of the model (see `trace_validation/REPORT.md`)
 - `src/gate_spec.rs`, `src/gate.rs`, `src/gate_lemmas.rs`, `tests/gate_witness.rs`: the D witness, a small command gate under configuration uncertainty (see `RESULTS.md` §12)
+- `src/fabric_spec.rs`, `src/fabric.rs`, `src/fabric_lemmas.rs`, `tests/fabric_witness.rs`: the B witness, switch-local rules with origin deadlines (see `RESULTS.md` §13)
 - `model/`: the TLA+ model and the paper's expected results (ground truth)
 
 ## Wire format
